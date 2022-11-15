@@ -11,15 +11,15 @@ This refrence solution is inteneded to give customers and partners an example of
 * Creating AI Workload AKS Cluster
 * Integrating with GitHub
 * Deploy AI Workload
-* Check E2E Solution
+* Validate E2E Solution Working
 * Cleanup Resources
 
 
 # Prerequesits
 For this E2E refrence solution you would need the following prerequisits:
-* 2 - node cluster (add link?)
-* Azure subscription
-* Windows Admin Center
+* 2 - node cluster [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
+* [Azure subscription](https://azure.microsoft.com/free)
+* [Windows Admin Center](https://azure.microsoft.com/en-us/contact/azure-stack-hci/) 
 
 # Preparing AzSHCI - 2 node cluster
 Follow the Microsoft Learn documentation to set up Windows Admin Center (WAC)
@@ -29,14 +29,37 @@ Follow the Microsoft Learn documents to configure your two node cluster:
 [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 
 # Configuring ARC and AKS on AzSHCI
-(add steps)
+When setting up AKS you will perform the steps to initally set up the AKS Management cluster and reserve IPs for all the Worker Clusters, then you will proceed to step below _Creating AI Workload AKS Cluster_. Work with your networking engineers to reserve a block of IP addressess and ensure you have vSwitch created. Gateway and DNS Servers can be found by looking at setting of the vSwitch in WAC. 
+## Here is the Engineering Plan used for our E2E Demo:
+
+> 
+> Subnet prefix: 172.23.30.0/24
+> Gateway: 172.23.30.1
+> DNS Servers:
+>	172.22.1.9
+>	172.22.3.9
+> Cloud agent IP – 172.23.30.151
+> Virtual IP address pool start – 172.23.30.152
+> Virtual IP address pool end – 172.23.30.172
+> Kubernetes node IP pool start – 172.23.30.173
+> Kubernetes node IP pool end – 172.23.30.193
+> 
+
+1. Prepare the 2-node cluster by installing AKS, follow this [Powershell QuickStart Guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/kubernetes-walkthrough-powershell)
+2. Alterntaivitally, you could setup with WAC. The demo was created with Static-IPs from above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup)
+
 
 # Creating AI Workload AKS Cluster
 Now that you have AKS and ARC installed in your management cluster. You need to create a AI Workload cluster and prime the nodes to leverage the AI Accelerator hardware. 
 ## Create AI Workload Cluster
-## Create a GPU Pool and attach GPUs to AI Workload Nodes
-## Preparing node for AI workload
+Follow [instructions](https://learn.microsoft.com/en-us/azure/aks/hybrid/create-kubernetes-cluster) to create an cluster named: AI Workload
+We stood up a 3 node AKS cluster.
 
+## Create a GPU Pool and attach GPUs to AI Workload Nodes
+Once your AI Workload cluster is created, go to WAC Cluster Manager and look at VM list. Take note of VM names for the AI Workload. 
+Follow [these steps](https://learn.microsoft.com/en-us/azure-stack/hci/manage/use-gpu-with-clustered-vm) to create a GPU Pool in WAC and assign the VMs from the AI Workload Cluster. 
+
+## Preparing node for AI workload
 Now that we have the GPUs assigned, we need to install Docker and the Nvidia plug-in. 
 1.Go to Docker page and find your respective binary. For this example we use x86_64 docker-20.10.9.tgz.
 [Docker binaries](https://docs.docker.com/engine/install/binaries/#install-static-binaries)
@@ -157,12 +180,14 @@ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.
 
 # Integrating with GitHub
 # Deploy AI Workload
-# Check E2E Solution
+# Validate E2E Solution Working
+### go to VCL and see inferencing results
+rtsp://172.23.30.162:30007/ds-test 
+
 # Cleanup Resources
 
 	
-### go to VCL and see inferencing results
-rtsp://172.23.30.162:30007/ds-test ![image](https://user-images.githubusercontent.com/47536604/193683136-ff9896fa-c0ab-4616-b691-26f0193d4028.png)
+
 
 
 ### Configuring ARC and integration with GitHub
