@@ -42,93 +42,86 @@ Now that we have the GPUs assigned, we need to install Docker and the Nvidia plu
 [Docker binaries](https://docs.docker.com/engine/install/binaries/#install-static-binaries)
 
 2. Get the Workload AI node IP address and connect using your rsa. When using WAC, these will be placed in your Cluster storage under volumes then AksHCI. You can run this from your dev machience command prompt, but ensure you are in the same folder as the rsa file. For command below we copied out the rsa file to dev machiene and renamed to _akshci_rsa.xml_. Learn more at [Connect with SSH to Linux or Windows worker nodes](https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection)
-(HTML <blockquote> ssh -i akshci_rsa.xml clouduser@172.23.30.157) 
+(HTML <blockquote> ssh -i akshci_rsa.xml clouduser@172.23.30.157 
 
 3. Once on the Workload AI node, download the docker binary.
-	sudo curl https://download.docker.com/linux/static/stable/x86_64/docker-20.10.9.tgz -o docker-20.10.9.tgz
+(HTML <blockquote> sudo curl https://download.docker.com/linux/static/stable/x86_64/docker-20.10.9.tgz -o docker-20.10.9.tgz
 
 4. Inflate docker binaries.
-	sudo tar xzvf docker-20.10.9.tgz
+(HTML <blockquote> sudo tar xzvf docker-20.10.9.tgz
 
 5. Remove any running files.
-	sudo rm -rf '/usr/bin/containerd'
-	sudo rm -rf '/usr/bin/containerd-shim-runc-v2'
+(HTML <blockquote> sudo rm -rf '/usr/bin/containerd'
+(HTML <blockquote> sudo rm -rf '/usr/bin/containerd-shim-runc-v2'
 	
 6. Copy the binaries to your clouduser location. 
-	sudo cp docker/* /usr/bin/
+(HTML <blockquote> sudo cp docker/* /usr/bin/
 
 7. Run docker in background.
-	sudo dockerd &
+(HTML <blockquote> sudo dockerd &
 	
 8. Installing the Nvidia GPU plugin. Go to Nvidia page for full set of instructions. 
 [GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes](https://github.com/NVIDIA/k8s-device-plugin#preparing-your-gpu-nodes)
 
 9. Update docker as default runtime by createing daemon.json
-	sudo vim /etc/docker/daemon.json
+(HTML <blockquote> sudo vim /etc/docker/daemon.json
 
 10. Paste into newly created daemon.json file
-{
-    "default-runtime": "nvidia",
-    "runtimes": {
-        "nvidia": {
-            "path": "/usr/bin/nvidia-container-runtime",
-            "runtimeArgs": []
-        }
-    }
-}
+(HTML <blockquote> {
+(HTML <blockquote>     "default-runtime": "nvidia",
+(HTML <blockquote>     "runtimes": {
+(HTML <blockquote>         "nvidia": {
+(HTML <blockquote>             "path": "/usr/bin/nvidia-container-runtime",
+(HTML <blockquote>             "runtimeArgs": []
+(HTML <blockquote>         }
+(HTML <blockquote>     }
+(HTML <blockquote> }
 
 11. Ceck to ensure changes took.
-	sudo cat /etc/docker/daemon.json
+(HTML <blockquote> sudo cat /etc/docker/daemon.json
 	
 12. Remove running files and restart docker
-
-	sudo rm /var/run/docker.pid
-	sudo rm -rf /var/lib/docker/volumes/*
-
-	sudo dockerd &
+(HTML <blockquote> sudo rm /var/run/docker.pid
+(HTML <blockquote> sudo rm -rf /var/lib/docker/volumes/*
+(HTML <blockquote> sudo dockerd &
 
 
 12. Configure containerd. Open the config.toml file and paste in modification from step 13.
-
-	sudo vim /etc/containerd/config.toml
+(HTML <blockquote> sudo vim /etc/containerd/config.toml
 
 13. Paste into file
-version = 2
-[plugins]
-  [plugins."io.containerd.grpc.v1.cri"]
-    [plugins."io.containerd.grpc.v1.cri".containerd]
-      default_runtime_name = "nvidia"
-
-      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
-        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-          privileged_without_host_devices = false
-          runtime_engine = ""
-          runtime_root = ""
-          runtime_type = "io.containerd.runc.v2"
-          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
-            BinaryName = "/usr/bin/nvidia-container-runtime"
+(HTML <blockquote> version = 2
+(HTML <blockquote> [plugins]
+(HTML <blockquote>   [plugins."io.containerd.grpc.v1.cri"]
+(HTML <blockquote>     [plugins."io.containerd.grpc.v1.cri".containerd]
+(HTML <blockquote>       default_runtime_name = "nvidia"
+(HTML <blockquote>
+(HTML <blockquote>       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+(HTML <blockquote>         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+(HTML <blockquote>           privileged_without_host_devices = false
+(HTML <blockquote>           runtime_engine = ""
+(HTML <blockquote>           runtime_root = ""
+(HTML <blockquote>           runtime_type = "io.containerd.runc.v2"
+(HTML <blockquote>           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+(HTML <blockquote>             BinaryName = "/usr/bin/nvidia-container-runtime"
 
 14. Check to ensure changes took.
-
-	sudo cat /etc/containerd/config.toml
+(HTML <blockquote> sudo cat /etc/containerd/config.toml
 
 15. Restart containerd
-
-	sudo systemctl restart containerd
+(HTML <blockquote> sudo systemctl restart containerd
 
 16. Optional troubleshooting:
-	sudo systemctl stop containerd
-	sudo systemctl start containerd
-	
-	sudo containerd
+(HTML <blockquote> sudo systemctl stop containerd
+(HTML <blockquote> sudo systemctl start containerd
+(HTML <blockquote> sudo containerd
 	
 17. From powershell in the kubectl command line. Enabeling GPU supporting in k8. 
-Run deployment
-
-	kubectl apply -f edge-ai1.yaml
+(HTML <blockquote> Run deployment
+(HTML <blockquote> kubectl apply -f edge-ai1.yaml
 	
-Run nvidia plugin
-	kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
+(HTML <blockquote> Run nvidia plugin
+(HTML <blockquote> kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
 	
 	
 
