@@ -57,22 +57,28 @@ sudo tar xzvf docker-20.10.9.tgz
 ```
 
 5. Remove any running files.
-> sudo rm -rf '/usr/bin/containerd' 
-> 
-> sudo rm -rf '/usr/bin/containerd-shim-runc-v2'
-> 
+```bash
+sudo rm -rf '/usr/bin/containerd' 
+sudo rm -rf '/usr/bin/containerd-shim-runc-v2'
+``` 
 	
 6. Copy the binaries to your clouduser location. 
-<blockquote> sudo cp docker/* /usr/bin/ </blockquote>
+```bash
+sudo cp docker/* /usr/bin/ 
+```
 
 7. Run docker in background.
-<blockquote> sudo dockerd &  </blockquote>
+```bash
+sudo dockerd & 
+```
 	
 8. Installing the Nvidia GPU plugin. Go to Nvidia page for full set of instructions. 
 [GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes](https://github.com/NVIDIA/k8s-device-plugin#preparing-your-gpu-nodes)
 
 9. Update docker as default runtime by createing daemon.json
-<blockquote> sudo vim /etc/docker/daemon.json  </blockquote>
+```bash
+sudo vim /etc/docker/daemon.json
+```
 
 10. Paste into newly created daemon.json file
 ```json
@@ -88,21 +94,23 @@ sudo tar xzvf docker-20.10.9.tgz
 ```
 
 11. Ceck to ensure changes took.
-<blockquote> sudo cat /etc/docker/daemon.json  </blockquote>
+```bash
+sudo cat /etc/docker/daemon.json
+```
 	
 12. Remove running files and restart docker
-> sudo rm /var/run/docker.pid 
-> 
-> sudo rm -rf /var/lib/docker/volumes/*
-> 
-> sudo dockerd &
->
+```bash
+sudo rm /var/run/docker.pid 
+sudo rm -rf /var/lib/docker/volumes/*
+sudo dockerd &
+```
 
 
 12. Configure containerd. Open the config.toml file and paste in modification from step 13.
 <blockquote> sudo vim /etc/containerd/config.toml  </blockquote>
 
 13. Paste into file
+```json
 version = 2
  [plugins]
    [plugins."io.containerd.grpc.v1.cri"]
@@ -117,28 +125,34 @@ version = 2
            runtime_type = "io.containerd.runc.v2"
            [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
             BinaryName = "/usr/bin/nvidia-container-runtime"
-
+```
 14. Check to ensure changes took.
-<blockquote> sudo cat /etc/containerd/config.toml  </blockquote>
+```bash
+sudo cat /etc/containerd/config.toml
+```
 
 15. Restart containerd
-<blockquote> sudo systemctl restart containerd  </blockquote>
+```bash
+sudo systemctl restart containerd
+```
 
 16. Optional troubleshooting:
-> sudo systemctl stop containerd
-> 
-> sudo systemctl start containerd
-> 
-> sudo containerd
-> 
+```bash
+sudo systemctl stop containerd
+sudo systemctl start containerd
+sudo containerd
+``` 
 	
 17. From powershell in the kubectl command line. Enabeling GPU supporting in k8. 
-<blockquote> Run deployment  </blockquote>
-(blockquote> kubectl apply -f edge-ai1.yaml  </blockquote>
-	
-<blockquote> Run nvidia plugin  </blockquote>
-<blockquote> kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml  </blockquote>
-	
+
+Run deployment
+```bash
+kubectl apply -f edge-ai1.yaml
+```
+Run nvidia plugin
+```bash
+kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml 
+```
 	
 
 # Integrating with GitHub
