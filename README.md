@@ -69,9 +69,7 @@ Now that we have the GPUs assigned, we need to install Docker and the Nvidia plu
 <blockquote> sudo vim /etc/docker/daemon.json  </blockquote>
 
 10. Paste into newly created daemon.json file
-> daemon.json
->
-'''
+```json
 {
     "default-runtime": "nvidia",
      "runtimes": {
@@ -81,7 +79,7 @@ Now that we have the GPUs assigned, we need to install Docker and the Nvidia plu
          }
      }
 }
-'''
+```
 
 11. Ceck to ensure changes took.
 <blockquote> sudo cat /etc/docker/daemon.json  </blockquote>
