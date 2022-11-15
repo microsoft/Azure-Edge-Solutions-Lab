@@ -1,11 +1,11 @@
 # Reference Solution - EdgeAI running on AzS HCI using AKS and Arc
 
-This refrence solution is inteneded to give customers and partners an example of how one can deploy and manage an Edge AI workload by leverageing certified AzS HCI hardware and using AKS and ARC.  
+This reference solution is intended to give customers and partners an example of how one can deploy and manage an Edge AI workload by leveraging certified AzSHCI hardware and using AKS and ARC.  
 
 <img width="411" alt="image" src="https://user-images.githubusercontent.com/47536604/193682639-d53a6a1c-8953-4cce-8341-32e1f9ffc574.png">
 
 ### Major sections of this E2E tutorial:
-* Prerequesits
+* Prerequisites
 * Preparing AzSHCI - 2 node cluster
 * Configuring ARC and AKS on AzSHCI
 * Creating AI Workload AKS Cluster
@@ -15,56 +15,67 @@ This refrence solution is inteneded to give customers and partners an example of
 * Cleanup Resources
 
 
-# Prerequesits
-For this E2E refrence solution you would need the following prerequisits:
+# Prerequisites
+For this E2E reference  solution you would need the following prerequisites:
 * 2 - node cluster [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 * [Azure subscription](https://azure.microsoft.com/free)
 * [Windows Admin Center](https://azure.microsoft.com/en-us/contact/azure-stack-hci/) 
 
 # Preparing AzSHCI - 2 node cluster
 Follow the Microsoft Learn documentation to set up Windows Admin Center (WAC)
-[Quickstart setup AzSHCI with WAC](https://learn.microsoft.com/en-us/azure-stack/hci/get-started)
+[QuickStart setup AzSHCI with WAC](https://learn.microsoft.com/en-us/azure-stack/hci/get-started)
 
-Follow the Microsoft Learn documents to configure your two node cluster:
+Follow the Microsoft Learn documents to configure your two-node cluster:
 [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 
 # Configuring ARC and AKS on AzSHCI
-When setting up AKS you will perform the steps to initally set up the AKS Management cluster and reserve IPs for all the Worker Clusters, then you will proceed to step below _Creating AI Workload AKS Cluster_. Work with your networking engineers to reserve a block of IP addressess and ensure you have vSwitch created. Gateway and DNS Servers can be found by looking at setting of the vSwitch in WAC. 
+When setting up AKS you will perform the steps to initially set up the AKS Management cluster and reserve IPs for all the Worker Clusters, then you will proceed to step below _Creating AI Workload AKS Cluster_. Work with your networking engineers to reserve a block of IP addresses and ensure you have vSwitch created. Gateway and DNS Servers can be found by looking at setting of the vSwitch in WAC. 
 ## Here is the Engineering Plan used for our E2E Demo:
 
 > 
 > Subnet prefix: 172.23.30.0/24
+> 
 > Gateway: 172.23.30.1
+> 
 > DNS Servers:
+> 
 >	172.22.1.9
+>	
 >	172.22.3.9
+>	
 > Cloud agent IP – 172.23.30.151
+> 
 > Virtual IP address pool start – 172.23.30.152
+> 
 > Virtual IP address pool end – 172.23.30.172
+> 
 > Kubernetes node IP pool start – 172.23.30.173
+> 
 > Kubernetes node IP pool end – 172.23.30.193
 > 
 
-1. Prepare the 2-node cluster by installing AKS, follow this [Powershell QuickStart Guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/kubernetes-walkthrough-powershell)
-2. Alterntaivitally, you could setup with WAC. The demo was created with Static-IPs from above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup)
+1. Prepare the 2-node cluster by installing AKS, follow this [PowerShell QuickStart Guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/kubernetes-walkthrough-powershell)
+2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup)
 
 
 # Creating AI Workload AKS Cluster
-Now that you have AKS and ARC installed in your management cluster. You need to create a AI Workload cluster and prime the nodes to leverage the AI Accelerator hardware. 
+Now you have AKS and ARC installed in your management cluster. You need to create a AI Workload cluster and prime the nodes to leverage the AI Accelerator hardware. 
 ## Create AI Workload Cluster
-Follow [instructions](https://learn.microsoft.com/en-us/azure/aks/hybrid/create-kubernetes-cluster) to create an cluster named: AI Workload
+Follow [instructions](https://learn.microsoft.com/en-us/azure/aks/hybrid/create-kubernetes-cluster) to create a cluster named: AI Workload
 We stood up a 3 node AKS cluster.
 
 ## Create a GPU Pool and attach GPUs to AI Workload Nodes
-Once your AI Workload cluster is created, go to WAC Cluster Manager and look at VM list. Take note of VM names for the AI Workload. 
+Once your AI Workload cluster is created, go to WAC Cluster Manager, and look at VM list. Take note of VM names for the AI Workload.
+
 Follow [these steps](https://learn.microsoft.com/en-us/azure-stack/hci/manage/use-gpu-with-clustered-vm) to create a GPU Pool in WAC and assign the VMs from the AI Workload Cluster. 
 
 ## Preparing node for AI workload
 Now that we have the GPUs assigned, we need to install Docker and the Nvidia plug-in. 
-1.Go to Docker page and find your respective binary. For this example we use x86_64 docker-20.10.9.tgz.
+
+1.Go to Docker page and find your respective binary. For this example, we use x86_64 docker-20.10.9.tgz.
 [Docker binaries](https://docs.docker.com/engine/install/binaries/#install-static-binaries)
 
-2. Get the Workload AI node IP address and connect using your rsa. When using WAC, these will be placed in your Cluster storage under volumes then AksHCI. You can run this from your dev machience command prompt, but ensure you are in the same folder as the rsa file. For command below we copied out the rsa file to dev machiene and renamed to _akshci_rsa.xml_. Learn more at [Connect with SSH to Linux or Windows worker nodes](https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection)
+2. Get the Workload AI node IP address and connect using your rsa. When using WAC, these will be placed in your Cluster storage under volumes then AksHCI. You can run this from your dev machine command prompt, but ensure you are in the same folder as the rsa file. For command below we copied out the rsa file to dev machine and renamed to _akshci_rsa.xml_. Learn more at [Connect with SSH to Linux or Windows worker nodes](https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection)
 ```shell
 ssh -i akshci_rsa.xml clouduser@172.23.30.157
 ```
@@ -179,6 +190,11 @@ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.
 	
 
 # Integrating with GitHub
+1. Follow the [QuickStart](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2) to configure your ARC enabled AKS cluster with GitHub using Flux.
+
+Remember to have the Kubernetes default namespace identified in your deployment yaml.
+
+
 # Deploy AI Workload
 # Validate E2E Solution Working
 ### go to VCL and see inferencing results
