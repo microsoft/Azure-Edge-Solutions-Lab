@@ -1,54 +1,73 @@
-## Reference Solution - EdgeAI running on AzS HCI using AKS and Arc
+# Reference Solution - EdgeAI running on AzS HCI using AKS and Arc
 
 This refrence solution is inteneded to give customers and partners an example of how one can deploy and manage an Edge AI workload by leverageing certified AzS HCI hardware and using AKS and ARC.  
 
 <img width="411" alt="image" src="https://user-images.githubusercontent.com/47536604/193682639-d53a6a1c-8953-4cce-8341-32e1f9ffc574.png">
 
-## Prerequesets
+### Major sections of this E2E tutorial:
+* Prerequesits
+* Preparing AzSHCI - 2 node cluster
+* Configuring ARC and AKS on AzSHCI
+* Creating AI Workload AKS Cluster
+* Integrating with GitHub
+* Deploy AI Workload
+* Check E2E Solution
+* Cleanup Resources
 
-## Preparing AzS HCI - 2 node cluster
 
-## Configuring AKS on AzS HCI
+# Prerequesits
+For this E2E refrence solution you would need the following prerequisits:
+* 2 - node cluster (add link?)
+* Azure subscription
+* Windows Admin Center
 
-# Initial AKS setup
-# Preparing node for AI workload
-Installing Docker on cluster
-https://docs.docker.com/engine/install/binaries/#install-static-binaries
+# Preparing AzSHCI - 2 node cluster
+Follow the Microsoft Learn documentation to set up Windows Admin Center (WAC)
+[Quickstart setup AzSHCI with WAC](https://learn.microsoft.com/en-us/azure-stack/hci/get-started)
 
-## find the VM you want docker installed on and SSH into it
+Follow the Microsoft Learn documents to configure your two node cluster:
+[Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
+
+# Configuring ARC and AKS on AzSHCI
+(add steps)
+
+# Creating AI Workload AKS Cluster
+Now that you have AKS and ARC installed in your management cluster. You need to create a AI Workload cluster and prime the nodes to leverage the AI Accelerator hardware. 
+## Create AI Workload Cluster
+## Create a GPU Pool and attach GPUs to AI Workload Nodes
+## Preparing node for AI workload
+
+Now that we have the GPUs assigned, we need to install Docker and the Nvidia plug-in. 
+1.Go to Docker page and find your respective binary. For this example we use x86_64 docker-20.10.9.tgz.
+[Docker binaries](https://docs.docker.com/engine/install/binaries/#install-static-binaries)
+
+2. Get the Workload AI node IP address and connect using your rsa. When using WAC, these will be placed in your Cluster storage under volumes then AksHCI. You can run this from your dev machience command prompt, but ensure you are in the same folder as the rsa file. For command below we copied out the rsa file to dev machiene and renamed to _akshci_rsa.xml_. Learn more at [Connect with SSH to Linux or Windows worker nodes](https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection)
 	ssh -i akshci_rsa.xml clouduser@172.23.30.157 
 
-# download docker binary
+3. Once on the Workload AI node, download the docker binary.
 	sudo curl https://download.docker.com/linux/static/stable/x86_64/docker-20.10.9.tgz -o docker-20.10.9.tgz
 
-#inflate docker binaries
+4. Inflate docker binaries.
 	sudo tar xzvf docker-20.10.9.tgz
 
-# remove running files
+5. Remove any running files.
 	sudo rm -rf '/usr/bin/containerd'
 	sudo rm -rf '/usr/bin/containerd-shim-runc-v2'
 	
-	
-# copy the binaries 
+6. Copy the binaries to your clouduser location. 
 	sudo cp docker/* /usr/bin/
 
-# Run docker in background
+7. Run docker in background.
 	sudo dockerd &
 	
+8. Installing the Nvidia GPU plugin. Go to Nvidia page for full set of instructions. 
+[GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes](https://github.com/NVIDIA/k8s-device-plugin#preparing-your-gpu-nodes)
 
-
-Installing the Nvidia GPU plugin
-GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes
-
-
-## update docker as default runtime
-## create daemon.json
-
+9. Update docker as default runtime by createing daemon.json
 	sudo vim /etc/docker/daemon.json
 
-# paste into empty file
-
-	{
+10. Paste into newly created daemon.json file
+{
     "default-runtime": "nvidia",
     "runtimes": {
         "nvidia": {
@@ -58,11 +77,10 @@ GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes
     }
 }
 
-## check to make sure changes took
+11. Ceck to ensure changes took.
 	sudo cat /etc/docker/daemon.json
 	
-
-# remove running files and  restart docker
+12. Remove running files and restart docker
 
 	sudo rm /var/run/docker.pid
 	sudo rm -rf /var/lib/docker/volumes/*
@@ -70,14 +88,11 @@ GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes
 	sudo dockerd &
 
 
-
-#configure containerd 
-
-#open config file
+12. Configure containerd. Open the config.toml file and paste in modification from step 13.
 
 	sudo vim /etc/containerd/config.toml
 
-# paste into file
+13. Paste into file
 version = 2
 [plugins]
   [plugins."io.containerd.grpc.v1.cri"]
@@ -93,51 +108,44 @@ version = 2
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
             BinaryName = "/usr/bin/nvidia-container-runtime"
 
-## check to make sure changes took
+14. Check to ensure changes took.
 
 	sudo cat /etc/containerd/config.toml
 
-
-## restart containerd
+15. Restart containerd
 
 	sudo systemctl restart containerd
 
-
-
-	
-	#optional troubleshooting ##
+16. Optional troubleshooting:
 	sudo systemctl stop containerd
 	sudo systemctl start containerd
 	
 	sudo containerd
 	
-	
-	
-	
-	
-#from powershell in the kubectl command line
-#enabeling GPU supporting in k8
-
-	
-# run deployment
+17. From powershell in the kubectl command line. Enabeling GPU supporting in k8. 
+Run deployment
 
 	kubectl apply -f edge-ai1.yaml
 	
-# run nvidia plugin
+Run nvidia plugin
 	kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
 	
 	
-	
+
+# Integrating with GitHub
+# Deploy AI Workload
+# Check E2E Solution
+# Cleanup Resources
 
 	
-# go to VCL and see inferencing results
+### go to VCL and see inferencing results
 rtsp://172.23.30.162:30007/ds-test ![image](https://user-images.githubusercontent.com/47536604/193683136-ff9896fa-c0ab-4616-b691-26f0193d4028.png)
 
 
-## Configuring ARC and integration with GitHub
+### Configuring ARC and integration with GitHub
 
 
-## Deploying Edge AI workload
+### Deploying Edge AI workload
 
 
 
