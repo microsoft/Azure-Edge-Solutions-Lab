@@ -141,23 +141,25 @@ sudo dockerd &
 
 
 12. Configure containerd. Open the config.toml file and paste in modification from step 13.
-<blockquote> sudo vim /etc/containerd/config.toml  </blockquote>
+```bash
+sudo vim /etc/containerd/config.toml
+```
 
 13. Paste into file
 ```json
 version = 2
- [plugins]
-   [plugins."io.containerd.grpc.v1.cri"]
-     [plugins."io.containerd.grpc.v1.cri".containerd]
-       default_runtime_name = "nvidia"
+[plugins]
+  [plugins."io.containerd.grpc.v1.cri"]
+    [plugins."io.containerd.grpc.v1.cri".containerd]
+      default_runtime_name = "nvidia"
 
-       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
-         [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
-           privileged_without_host_devices = false
-           runtime_engine = ""
-           runtime_root = ""
-           runtime_type = "io.containerd.runc.v2"
-           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+        [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia]
+          privileged_without_host_devices = false
+          runtime_engine = ""
+          runtime_root = ""
+          runtime_type = "io.containerd.runc.v2"
+          [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.nvidia.options]
             BinaryName = "/usr/bin/nvidia-container-runtime"
 ```
 14. Check to ensure changes took.
