@@ -146,7 +146,7 @@ sudo vim /etc/containerd/config.toml
 ```
 
 13. Paste into file
-```json
+```yaml
 version = 2
 [plugins]
   [plugins."io.containerd.grpc.v1.cri"]
