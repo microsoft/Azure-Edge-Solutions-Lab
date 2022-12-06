@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html  lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <style>
+        .circle {
+          height: 50px;
+          width: 50px;
+          background-color: red;
+          border-radius: 50%;
+        }
+    </style>
+    <title>Flask App </title>
+
+    <!-- Bootstraps Java Scipts Links -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+
+
+    <!-- JQuery links  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+    <!--High CHART LIVE  -->
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+    <!--Gauge  -->
+    <script type="text/javascript" src="http://pubnub.github.io/eon/lib/eon.js"></script>
+
+    
+
+</head>
+
+
+<body>
+
+    <div class="jumbotron" style="background-color: white">
+        
+        <h1 class="text-center text-black"><img src="/static/contoso.png" width="50" height="50">Contoso Restaurant</h1>
+        <br>
+        <br>
+        <h1 class="text-center text-black">Orders </h1>
+    </div>   
+    <div class="container-fluid">
+        
+        <div class="row">
+
+            <div id="bag1" class="col-5 jumbotron p-2 mx-1" style="border: 5px; border-style: solid; border-color: red">
+                <div id="status1" class="circle" style="float: right; margin-left: 3.5cm"></div>
+                <h1 id="order1" style="margin-left: 0.5cm"> Bag 1 </h1>
+                
+                <ol id="list1">               
+                    <li id="iteml12"> French Fries </li>
+                    <li id="iteml13"> Cheeseburger </li>                 
+                    <li id="iteml11"> Soda </li>
+                    <li id="iteml14"> Chicken Nuggets </li>
+                </ol>
+            </div>
+            <br>
+
+            <div id = "bag2" class="col-5 jumbotron p-2 mx-1" style="border: 5px; border-style: solid; border-color: red">
+                <div id="status2" class="circle" style="float: right; margin-left: 3.5cm"></div>
+                <h1 id="order2" style="margin-left: 0.5cm"> Bag 2 </h1>
+                <ol id="list2">
+                    <li id="iteml23"> French Fries </li>
+                    <li id="iteml22"> Soda </li>
+                    <li id="iteml25"> Fish Sandwich </li>
+                    <li id="iteml21"> Chicken Sandwich </li>
+                    <li id="iteml24"> Spicy Chicken Sandwich </li>
+                </ol>
+            </div>
+            <br>
+        </div>
+        <br>
+        <br>
+        <h1 id="latency" class="text-center text-black"> </h1>
+        
+    </div>
+    <script>
+        setInterval(requestData, 1000)
+        function requestData() {
+            data = "";
+            var requests = $.get('/data');
+            var tm = requests.done(function (response){
+                console.log(response);
+                $.each(response, function(index, value) {
+                    data += value;
+                    // parse JSON string
+                    let obj = JSON.parse(value);
+                    let bagNumber = obj.bag_no;
+                    let status = obj.Status;
+                    console.log(status)
+                    console.log(bagNumber)
+                    if (status == "reload") {
+                        window.location.reload();
+                    }
+                    if (status == false) {
+                        let action = obj.action;
+                        let itemName = obj.item_name;
+                        console.log(action)
+                        console.log(itemName)
+                        if (action == "add") {
+                            // item is added to the wrong bag
+                            if (bagNumber == 1) {
+                                let ol = document.getElementById("list1");
+                                let li = document.createElement('li')
+                                //ol.appendChild(li).innerHTML = '<li style="background-color:orange">' + itemName + '</li>';
+                                li.setAttribute("id", "error");
+                                li.appendChild(document.createTextNode(itemName));
+                                ol.appendChild(li);
+                                var element = document.getElementById("error");
+                                element.style.backgroundColor = "orange";
+                                var orderStatus = document.getElementById("status1");
+                                orderStatus.style.backgroundColor = "red"
+                                var bagBorder = document.getElementById("bag1")
+                                bagBorder.style.borderColor = "red";
+                            }
+                            else {
+                                
+                            }
+                        }
+                        else if (action == "remove") {
+                            // item is removed from the wrong bag
+                        }
+                        
+                    }
+                    else if (status == true) {
+                        let action = obj.action;
+                        let itemName = obj.item_name;
+                        console.log(action)
+                        console.log(itemName)
+                        if (action == "add") {
+                            // item is added to the correct bag
+                            if (bagNumber == 1) {
+                                if (itemName == "Soda") {
+                                    document.getElementById("iteml11").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "French Fries") {
+                                    document.getElementById("iteml12").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "Cheeseburger") {
+                                    document.getElementById("iteml13").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "Chicken Nuggets") {
+                                    document.getElementById("iteml14").style.backgroundColor = "lightgreen";
+                                }
+                            }
+                            else if (bagNumber == 2) {
+                                if (itemName == "Chicken Sandwich") {
+                                    document.getElementById("iteml21").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "Soda") {
+                                    document.getElementById("iteml22").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "French Fries") {
+                                    document.getElementById("iteml23").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "Spicy Chicken Sandwich") {
+                                    document.getElementById("iteml24").style.backgroundColor = "lightgreen";
+                                }
+                                if (itemName == "Fish Sandwich") {
+                                    document.getElementById("iteml25").style.backgroundColor = "lightgreen";
+                                }
+                            }
+                        }
+                        else if (action == "remove") {
+                            // item is removed from the correct bag 
+                            if (bagNumber == 1) {
+                                let ol = document.getElementById("list1");
+                                let items = document.getElementById("error");
+                                ol.removeChild(items);
+                            }
+                            else {
+                            
+                            }
+                        }
+                    }
+                    if (status == "order-completed") {
+                        if (bagNumber == 1) {
+                            var orderStatus = document.getElementById("status1");
+                            var bagBorder = document.getElementById("bag1")
+                            orderStatus.style.backgroundColor = "green"
+                            bagBorder.style.borderColor = "green"
+                        }
+                        else {
+                            var orderStatus = document.getElementById("status2");
+                            var bagBorder = document.getElementById("bag2")
+                            orderStatus.style.backgroundColor = "green"
+                            bagBorder.style.borderColor = "green"
+                        }
+                    }
+                });
+                //$(".logs").text(data);
+                console.log(data);
+            });
+        }
+    </script>
+
+    <style>
+
+        .jumbotron{
+            widows: 150px;
+            height: 220px;
+            justify-content: center;
+        }
+
+        .row{
+            justify-content: center;
+        }
+
+
+    </style>
+    
+</body>
+
+
+</html>
