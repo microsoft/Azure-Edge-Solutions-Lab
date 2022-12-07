@@ -37,50 +37,83 @@
 </head>
 
 
-<body>
-
-    <div class="jumbotron" style="background-color: white">
-        
-        <h1 class="text-center text-black"><img src="/static/contoso.png" width="50" height="50">Contoso Restaurant</h1>
-        <br>
-        <br>
-        <h1 class="text-center text-black">Orders </h1>
-    </div>   
+<body>    
+    <br>
+    <h1 class="text-center text-black"><img src="/static/contoso.png" width="50" height="50">Contoso Restaurant</h1>
+    <br>  
     <div class="container-fluid">
-        
         <div class="row">
-
-            <div id="bag1" class="col-5 jumbotron p-2 mx-1" style="border: 5px; border-style: solid; border-color: red">
-                <div id="status1" class="circle" style="float: right; margin-left: 3.5cm"></div>
-                <h1 id="order1" style="margin-left: 0.5cm"> Bag 1 </h1>
-                
-                <ol id="list1">               
-                    <li id="iteml12"> French Fries </li>
-                    <li id="iteml13"> Cheeseburger </li>                 
-                    <li id="iteml11"> Soda </li>
-                    <li id="iteml14"> Chicken Nuggets </li>
-                </ol>
-            </div>
-            <br>
-
-            <div id = "bag2" class="col-5 jumbotron p-2 mx-1" style="border: 5px; border-style: solid; border-color: red">
-                <div id="status2" class="circle" style="float: right; margin-left: 3.5cm"></div>
-                <h1 id="order2" style="margin-left: 0.5cm"> Bag 2 </h1>
-                <ol id="list2">
-                    <li id="iteml23"> French Fries </li>
-                    <li id="iteml22"> Soda </li>
-                    <li id="iteml25"> Fish Sandwich </li>
-                    <li id="iteml21"> Chicken Sandwich </li>
-                    <li id="iteml24"> Spicy Chicken Sandwich </li>
-                </ol>
-            </div>
-            <br>
+            <!-- iframe width="560" height="315" src="/static/Mcdonalds_receipt_v01.mp4" frameborder="0" allowfullscreen></iframe -->
+            <video controls autoplay muted loop width="560" height="315">
+                <source src="/static/Mcdonalds_receipt_v01.mp4" type="video/mp4">
+            </video>
         </div>
         <br>
-        <br>
-        <h1 id="latency" class="text-center text-black"> </h1>
+        <div id="orders" class="row">
+
+        </div>
         
     </div>
+    <script>
+        setInterval(getOrders, 1000)
+        function getOrders() {
+            var requests = $.get('/newOrder');
+            var tm = requests.done(function (response) {
+                console.log(response);
+                $.each(response, function(index, value) {
+                    console.log(value);
+                    let obj = JSON.parse(value);
+                    let bagNumber = obj.bag_no;
+                    let itemsList = obj.items; // list that contains JSON of order items and quantity
+                    // create a div to represent a bag
+                    let divBag = document.createElement("div");
+                    divBag.setAttribute("id", "bag_no" + bagNumber.toString(10)); // toString(base)
+                    divBag.setAttribute("class", "col-5 jumbotron p-2 mx-1");
+                    divBag.setAttribute("style", "border: 5px; border-style: solid; border-color: red");
+                    let orders = document.getElementById("orders");
+                    
+                    document.body.appendChild(divBag);
+                    orders.appendChild(divBag);
+
+                    // create a div to represent the order status
+                    let divStatus = document.createElement("div");
+                    divStatus.setAttribute("id", "status" + bagNumber.toString(10));
+                    divStatus.setAttribute("class", "circle");
+                    divStatus.setAttribute("style", "float: right; margin-left: 3.5cm");
+                    
+                    document.body.appendChild(divStatus);
+                    divBag.appendChild(divStatus);
+
+                    let heading = document.createElement("H1");
+                    heading.setAttribute("id", "order" + bagNumber.toString(10));
+                    heading.setAttribute("style", "margin-left: 0.5cm");
+                    let text = document.createTextNode("Bag " + bagNumber.toString(10));
+                    heading.appendChild(text);
+                    
+                    document.body.appendChild(heading);
+                    divBag.append(heading);
+
+                    // create ordered list for order items
+                    let orderedList = document.createElement("ol");
+                    orderedList.setAttribute("id", "list" + bagNumber.toString(10));
+                    divBag.appendChild(orderedList);
+                    // iterate key and value from json
+                    console.log(itemsList);
+                    let items = itemsList[0];
+                    Object.keys(items).forEach(function(key) {
+                        console.log('Key: ' + key + ', Value : ' + items[key].toString(10));
+                        for (let i=0; i<items[key]; i++) {
+                            let item = document.createElement("li");
+                            item.setAttribute("id", key + bagNumber.toString(10));
+                            item.appendChild(document.createTextNode(key));
+                            orderedList.appendChild(item);
+                        }
+                    })
+                });
+                console.log();
+            });
+        }
+    </script>
     <script>
         setInterval(requestData, 1000)
         function requestData() {
@@ -94,35 +127,30 @@
                     let obj = JSON.parse(value);
                     let bagNumber = obj.bag_no;
                     let status = obj.Status;
-                    console.log(status)
-                    console.log(bagNumber)
+                    console.log(status);
+                    console.log(bagNumber);
                     if (status == "reload") {
                         window.location.reload();
                     }
                     if (status == false) {
                         let action = obj.action;
                         let itemName = obj.item_name;
-                        console.log(action)
-                        console.log(itemName)
+                        console.log(action);
+                        console.log(itemName);
                         if (action == "add") {
                             // item is added to the wrong bag
-                            if (bagNumber == 1) {
-                                let ol = document.getElementById("list1");
-                                let li = document.createElement('li')
-                                //ol.appendChild(li).innerHTML = '<li style="background-color:orange">' + itemName + '</li>';
-                                li.setAttribute("id", "error");
-                                li.appendChild(document.createTextNode(itemName));
-                                ol.appendChild(li);
-                                var element = document.getElementById("error");
-                                element.style.backgroundColor = "orange";
-                                var orderStatus = document.getElementById("status1");
-                                orderStatus.style.backgroundColor = "red"
-                                var bagBorder = document.getElementById("bag1")
-                                bagBorder.style.borderColor = "red";
-                            }
-                            else {
-                                
-                            }
+                            let ol = document.getElementById("list" + bagNumber.toString(10));
+                            let li = document.createElement('li');
+                            li.setAttribute("id", "error");
+                            li.appendChild(document.createTextNode(itemName));
+                            ol.appendChild(li);
+                            var element = document.getElementById("error");
+                            element.style.backgroundColor = "orange";
+                            var orderStatus = document.getElementById("status" + bagNumber.toString(10));
+                            orderStatus.style.backgroundColor = "red";
+                            var bagBorder = document.getElementById("bag_no" + bagNumber.toString(10));
+                            bagBorder.style.borderColor = "red";
+                            
                         }
                         else if (action == "remove") {
                             // item is removed from the wrong bag
@@ -132,74 +160,31 @@
                     else if (status == true) {
                         let action = obj.action;
                         let itemName = obj.item_name;
-                        console.log(action)
-                        console.log(itemName)
+                        console.log(action);
+                        console.log(itemName);
                         if (action == "add") {
                             // item is added to the correct bag
-                            if (bagNumber == 1) {
-                                if (itemName == "Soda") {
-                                    document.getElementById("iteml11").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "French Fries") {
-                                    document.getElementById("iteml12").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "Cheeseburger") {
-                                    document.getElementById("iteml13").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "Chicken Nuggets") {
-                                    document.getElementById("iteml14").style.backgroundColor = "lightgreen";
-                                }
-                            }
-                            else if (bagNumber == 2) {
-                                if (itemName == "Chicken Sandwich") {
-                                    document.getElementById("iteml21").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "Soda") {
-                                    document.getElementById("iteml22").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "French Fries") {
-                                    document.getElementById("iteml23").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "Spicy Chicken Sandwich") {
-                                    document.getElementById("iteml24").style.backgroundColor = "lightgreen";
-                                }
-                                if (itemName == "Fish Sandwich") {
-                                    document.getElementById("iteml25").style.backgroundColor = "lightgreen";
-                                }
-                            }
+                            document.getElementById(itemName + bagNumber.toString(10)).style.backgroundColor = "lightgreen";
                         }
                         else if (action == "remove") {
                             // item is removed from the correct bag 
-                            if (bagNumber == 1) {
-                                let ol = document.getElementById("list1");
-                                let items = document.getElementById("error");
-                                ol.removeChild(items);
-                            }
-                            else {
-                            
-                            }
+                            let ol = document.getElementById("list" + bagNumber.toString(10));
+                            let items = document.getElementById("error");
+                            ol.removeChild(items);
                         }
                     }
-                    if (status == "order-completed") {
-                        if (bagNumber == 1) {
-                            var orderStatus = document.getElementById("status1");
-                            var bagBorder = document.getElementById("bag1")
-                            orderStatus.style.backgroundColor = "green"
-                            bagBorder.style.borderColor = "green"
-                        }
-                        else {
-                            var orderStatus = document.getElementById("status2");
-                            var bagBorder = document.getElementById("bag2")
-                            orderStatus.style.backgroundColor = "green"
-                            bagBorder.style.borderColor = "green"
-                        }
+                    else if (status == "order-completed") {
+                        console.log("complete-order " + bagNumber.toString(10));
+                        var orderStatus = document.getElementById("status" + bagNumber.toString(10));
+                        var bagBorder = document.getElementById("bag_no" + bagNumber.toString(10));
+                        orderStatus.style.backgroundColor = "green"
+                        bagBorder.style.borderColor = "green"
                     }
                 });
-                //$(".logs").text(data);
-                console.log(data);
             });
         }
     </script>
+    
 
     <style>
 

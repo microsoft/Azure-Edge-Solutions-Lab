@@ -10,13 +10,16 @@ app.config['MQTT_USERNAME'] = 'client1'  # Set this item when you need to verify
 app.config['MQTT_PASSWORD'] = 'password'  # Set this item when you need to verify username and password
 app.config['MQTT_KEEPALIVE'] = 5  # Set KeepAlive time in seconds
 app.config['MQTT_TLS_ENABLED'] = False  # If your broker supports TLS, set it True
+
+# MQTT Topics
 result = 'result'
 orders = 'orders'
+new_order = 'new-order'
 
 mqtt_client = Mqtt(app)
 
 results = []
-latency = []
+newOrder = []
 
 @app.route('/', methods=["GET", "POST"])
 def main():
@@ -43,11 +46,21 @@ def data():
     results.clear()
     return response
 
+@app.route('/newOrder', methods=["GET", "POST"])
+def getNewOrder():
+    response = make_response(json.dumps(newOrder))
+    response.content_type = 'application/json'
+    print(response)
+    newOrder.clear()
+    return response
+
 @mqtt_client.on_connect()
 def handle_connect(client, userdata, flags, rc):
     if rc == 0:
         print('Connected successfully')
-        mqtt_client.subscribe(result) # subscribe topic
+        # subscribe to topics
+        mqtt_client.subscribe(result)
+        mqtt_client.subscribe(new_order)
     else:
         print('Bad connection. Code:', rc)
 
@@ -58,10 +71,10 @@ def handle_mqtt_message(client, userdata, message):
         payload=message.payload.decode()
   )
     print('Received message on topic: {topic} with payload: {payload}'.format(**data))
-    if message.topic == "result":
+    if message.topic == result:
         results.append(data['payload'])
-    if message.topic == "latency":
-        latency.append(data['payload'])
+    if message.topic == new_order:
+        newOrder.append(data['payload'])
 
 if __name__ == '__main__':
     app.run(debug=True)
