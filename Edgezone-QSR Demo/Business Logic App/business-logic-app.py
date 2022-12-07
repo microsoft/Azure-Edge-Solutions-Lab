@@ -28,7 +28,11 @@ def on_message(client, userdata, message):
         if json_in_order["action"] == "add":
             json_out = json_in_order
             json_out["Status"] = True
-            order[0][json_in_order["item_name"]] -= 1           
+            order[0][json_in_order["item_name"]] -= 1
+            if isOrderComplete(order[0]):
+                order_complete = {"bag_no": json_in_order["bag_no"], "Status": "order-completed"}
+                print("Messages to Publish: ", order_complete)
+                client.publish(topic="result", payload=json.dumps(order_complete), qos=1, retain=False)           
         elif json_in_order["action"] == "remove":
             json_out = json_in_order
             json_out["Status"] = False
@@ -39,15 +43,16 @@ def on_message(client, userdata, message):
         elif json_in_order["action"] == "remove":
             json_out = json_in_order
             json_out["Status"] = True
+            if isOrderComplete(order[0]):
+                order_complete = {"bag_no": json_in_order["bag_no"], "Status": "order-completed"}
+                print("Messages to Publish: ", order_complete)
+                client.publish(topic="result", payload=json.dumps(order_complete), qos=1, retain=False)
             
             
     print("Messages to Publish: ", json_out)    
     #publish the result to broker
     client.publish(topic="result", payload=json.dumps(json_out), qos=1, retain=False)
-    if isOrderComplete(order[0]):
-        order_complete = {"bag_no": json_in_order["bag_no"], "Status": "order-completed"}
-        print("Messages to Publish: ", order_complete)
-        client.publish(topic="result", payload=json.dumps(order_complete), qos=1, retain=False)
+    
 
 def on_message_neworder(client, userdata, message):
     #decode the incoming message 
