@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-webapp
+  namespace: contoso
+  labels: 
+    app: webapp
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers: 
+      - name: webapp
+        image: <path-to-container>
+        ports:
+        - containerPort: 5000
+      imagePullSecrets:
+      - name: <name-of-secret-required-if-container-pull-needs-username-password>
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contoso-webapp-service
+  namespace: contoso
+spec:
+  type: LoadBalancer
+  selector:
+    app: webapp
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
