@@ -5,7 +5,7 @@ from datetime import datetime
 
 import paho.mqtt.client as mqtt
 
-broker_url = "13.105.113.2"
+broker_url = "13.105.113.2" # IP address of broker running on edgezone
 broker_port = 1883
 orders = []
 
