@@ -4,7 +4,7 @@ from flask_mqtt import Mqtt
 
 app = Flask(__name__)
 
-app.config['MQTT_BROKER_URL'] = '13.105.113.2'
+app.config['MQTT_BROKER_URL'] = '13.105.113.2' # IP address of broker running on edgezone
 app.config['MQTT_BROKER_PORT'] = 1883
 app.config['MQTT_USERNAME'] = 'client1'  # Set this item when you need to verify username and password
 app.config['MQTT_PASSWORD'] = 'password'  # Set this item when you need to verify username and password
