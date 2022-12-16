@@ -10,14 +10,14 @@ Azure Edge zone will also run AKS and ARC, but will be a cloud offereing located
 
 
 ### Major sections of this E2E tutorial:
-* Prerequisites
-* Preparing AKS in an Azure EdgeZone
-* Configuring ARC on Azure EdgeZone AKS
-* Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
-* Modify Store 1 deployment
-* Deploy to AKS on Azure EdgeZone
-* Validate E2E Solution Working
-* Cleanup Resources
+1. Prerequisites
+2. Preparing AKS in an Azure EdgeZone
+3. Configuring ARC on Azure EdgeZone AKS
+4. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
+5. Modify Store 1 deployment
+6. Deploy to AKS on Azure EdgeZone
+7. Validate E2E Solution Working
+8. Cleanup Resources
 
 ## Prerequisites
 
