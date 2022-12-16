@@ -1,17 +1,5 @@
 # Reference Solution - EdgeAI running on AzS HCI using AKS and Arc
 
-Welcome to the Azure Edge Solutions Lab GitHub Page
-
-
-In this repo you will find the following Labs:
-
-* Lab Demo for Quick Service Resturants (QSR)
-* Lab Demo to run a microservice from QSR on an Azure Edge Zone
-
-
-
----- TO REMOVE
-
 This reference solution is intended to give customers and partners an example of how one can deploy and manage an Edge AI workload by leveraging [certified AzSHCI hardware](https://azurestackhcisolutions.azure.microsoft.com/#/catalog) and using [AKS](https://learn.microsoft.com/en-us/azure/aks/hybrid/) and [ARC](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/overview).  
 
 <img width="411" alt="image" src="https://user-images.githubusercontent.com/47536604/193682639-d53a6a1c-8953-4cce-8341-32e1f9ffc574.png">
