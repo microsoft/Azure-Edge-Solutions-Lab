@@ -5,30 +5,30 @@ This reference solution is intended to give customers and partners an example of
 <img width="411" alt="image" src="https://user-images.githubusercontent.com/47536604/193682639-d53a6a1c-8953-4cce-8341-32e1f9ffc574.png">
 
 ### Major sections of this E2E tutorial:
-* Prerequisites
-* Preparing AzSHCI - 2 node cluster
-* Configuring ARC and AKS on AzSHCI
-* Creating AI Workload AKS Cluster
-* Integrating with GitHub
-* Deploy AI Workload
-* Validate E2E Solution Working
-* Cleanup Resources
+1. Prerequisites
+2. Preparing AzSHCI - 2 node cluster
+3. Configuring ARC and AKS on AzSHCI
+4. Creating AI Workload AKS Cluster
+5. Integrating with GitHub
+6. Deploy AI Workload
+7. Validate E2E Solution Working
+8. Cleanup Resources
 
 
-# Prerequisites
+# 1. Prerequisites
 For this E2E reference  solution you would need the following prerequisites:
 * 2 - node cluster [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 * [Azure subscription](https://azure.microsoft.com/free)
 * [Windows Admin Center](https://azure.microsoft.com/en-us/contact/azure-stack-hci/) 
 
-# Preparing AzSHCI - 2 node cluster
+# 2. Preparing AzSHCI - 2 node cluster
 Follow the Microsoft Learn documentation to set up Windows Admin Center (WAC)
 [QuickStart setup AzSHCI with WAC](https://learn.microsoft.com/en-us/azure-stack/hci/get-started)
 
 Follow the Microsoft Learn documents to configure your two-node cluster:
 [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 
-# Configuring ARC and AKS on AzSHCI
+# 3. Configuring ARC and AKS on AzSHCI
 When setting up AKS you will perform the steps to initially set up the AKS Management cluster and reserve IPs for all the Worker Clusters, then you will proceed to step below _Creating AI Workload AKS Cluster_. Work with your networking engineers to reserve a block of IP addresses and ensure you have vSwitch created. Gateway and DNS Servers can be found by looking at setting of the vSwitch in WAC. 
 ## Here is the Engineering Plan used for our E2E Demo:
 
@@ -58,7 +58,7 @@ When setting up AKS you will perform the steps to initially set up the AKS Manag
 2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup)
 
 
-# Creating AI Workload AKS Cluster
+# 4. Creating AI Workload AKS Cluster
 Now you have AKS and ARC installed in your management cluster. You need to create a AI Workload cluster and prime the nodes to leverage the AI Accelerator hardware. 
 ## Create AI Workload Cluster
 Follow [instructions](https://learn.microsoft.com/en-us/azure/aks/hybrid/create-kubernetes-cluster) to create a cluster named: AI Workload
@@ -191,27 +191,19 @@ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.
 ```
 	
 
-# Integrating with GitHub
+# 5. Integrating with GitHub
 1. Follow the [QuickStart](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2) to configure your ARC enabled AKS cluster with GitHub using Flux.
 
 Remember to have the Kubernetes default namespace identified in your deployment yaml.
 
 
-# Deploy AI Workload
-# Validate E2E Solution Working
+# 6. Deploy AI Workload
+# 7. Validate E2E Solution Working
 ### go to VCL and see inferencing results
 rtsp://172.23.30.162:30007/ds-test 
 
-# Cleanup Resources
 
-	
-
-
-
-### Configuring ARC and integration with GitHub
-
-
-### Deploying Edge AI workload
+# 8. Cleanup Resources
 
 
 
