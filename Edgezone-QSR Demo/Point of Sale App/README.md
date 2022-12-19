@@ -44,4 +44,4 @@ Once the secret is created you can use it in the yaml file-
 imagePullSecrets:
     - name: acr-secret-edgezone
 ```
-Look at the BL-client.yaml file in this directory for more information.
+Look at the pos-app.yaml file in this directory for more information.
