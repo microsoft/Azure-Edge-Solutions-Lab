@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-pos
+  namespace: contoso
+  labels:
+    app: pos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pos
+  template:
+    metadata:
+      labels:
+        app: pos
+    spec:
+      containers:
+      - name: point-of-sale
+        image: <path-to-container>
+      imagePullSecrets:
+        - name: <name-of-secret-required-if-container-pull-needs-username-password>
