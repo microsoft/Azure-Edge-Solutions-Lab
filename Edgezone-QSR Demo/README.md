@@ -1,12 +1,12 @@
-# Edgezone-QuickServiceResturant Lab
+# Edgezone Quick Service Restaurant Lab
 
-The EdgeZone Quick Service Resturant(QSR) Lab is intended to guide users in the implementation of a QSR distributed AI app scenario. The lab will take a simple Computer Vision app that has been deployed in an on-prem archicture using a container image and Kubernetes and then lift and shift the on-prem to an Azure EdgeZone. This lab will start with the traditional on-prem and the walk through detailed steps for lift and shift to Azure EdgeZone. https://azure.microsoft.com/en-us/solutions/public-multi-access-edge-compute-mec/#overview
+The EdgeZone Quick Service Restaurant (QSR) Lab is intended to guide users in the implementation of a QSR distributed AI app scenario. The lab will take a simple Computer Vision app that has been deployed in an on-prem archicture using a container image and Kubernetes and then lift and shift the on-prem to an Azure EdgeZone. This lab will start with the traditional on-prem and the walk-through detailed steps for lift and shift to Azure EdgeZone. https://azure.microsoft.com/en-us/solutions/public-multi-access-edge-compute-mec/#overview
 
 On-prem is Store 1 which has a two node AzSHCI cluster with Kubernetes and ARC 
-Azure Edge zone will also run AKS and ARC, but will be a cloud offereing located physcially close to Store 1
+Azure Edge zone will also run AKS and ARC, but will be a cloud offering located physically close to Store 1.
 
-![image](https://user-images.githubusercontent.com/47536604/207954780-d8b06255-d483-4231-9090-d8eefa2eeb68.png)
-![image](https://user-images.githubusercontent.com/47536604/207954839-ff205d65-8493-4b1c-b898-42dc919d3d0b.png)
+![Before topology using Azure EdgeZone](https://user-images.githubusercontent.com/47536604/207954780-d8b06255-d483-4231-9090-d8eefa2eeb68.png)
+![After topology using Azure EdgeZone](https://user-images.githubusercontent.com/47536604/207954839-ff205d65-8493-4b1c-b898-42dc919d3d0b.png)
 
 
 ### Major sections of this E2E tutorial:
