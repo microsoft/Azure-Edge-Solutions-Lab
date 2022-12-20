@@ -3,16 +3,17 @@
 Business Logic (BL) application is a MQTT client app written in Python that connects to a MQTT broker deployed on the Edgezone. The BL app accepts new orders from the Point of Service (PoS) application and inference results from the Edge AI container both via MQTT topics. It then compares the two inputs to determine if the correct item is being added.  
 
 There are six business scenarios we have accounted for in this client:
-1. A new Customers' order is created in POS system and is in need of being fulfilled
+1. A new Customers' order is created in POS system and needs to be fulfilled
 2. Item being added in the bag matches the POS order
 3. Item being added in the bag does not match the POS order
 4. Item being removed from the bag matches the POS order
 5. Item being removed from the bag does not match the POS order
 6. The order has been fulfilled and ready to give to customer
 
+The following image depects the processes logic.
 ![image](https://user-images.githubusercontent.com/47536604/208718819-ced8742a-7672-434e-b446-75744229acb6.png)
 
-A sample order would look as follows-
+A sample order would look as follows:
 ```json
 {
     "bag_no" : 1, 
@@ -24,7 +25,7 @@ A sample order would look as follows-
         }]
 }
 ```
-A sample inference result/action-
+A sample inference result/action:
 ```json
 {
     "bag_no": 1, 
@@ -33,7 +34,7 @@ A sample inference result/action-
 }
 ```
 The BL application will process the incoming inference and the corresponding order. It will determine a Status True or False for the current action (**True** meaning the action is correct and **False** meaning the action is incorrect). The BL will publish the processed JSON to the flask server via MQTT topic.
-A sample post-processed JSON would look as follows-
+A sample post-processed JSON would look as follows:
 ```json
 {
     "bag_no": 1, 
@@ -43,7 +44,7 @@ A sample post-processed JSON would look as follows-
 }
 ```
 
-The busines logic client will process the six use cases and return the following reponses:
+The business logic client will process the six use cases and return the following responses:
 | Use Case | BL Result |
 | --------------- | --- |
 | 1. A new Customers' order is created in POS system and is in need of being fulfilled | No result returned |
