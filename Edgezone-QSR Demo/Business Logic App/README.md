@@ -10,6 +10,7 @@ There are six business scenarios we have accounted for in this client:
 5. Item being removed from the bag does not match the POS order
 6. The order has been fulfilled and ready to give to customer
 
+![image](https://user-images.githubusercontent.com/47536604/208718819-ced8742a-7672-434e-b446-75744229acb6.png)
 
 A sample order would look as follows-
 ```json
