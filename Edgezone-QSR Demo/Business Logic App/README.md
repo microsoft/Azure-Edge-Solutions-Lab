@@ -43,14 +43,14 @@ A sample post-processed JSON would look as follows-
 ```
 
 The busines logic client will process the six use cases and return the following reponses:
-Use Case | BL Result
---- | ---
-1. A new Customers' order is created in POS system and is in need of being fulfilled | No result returned
-2. Item being added in the bag matches the POS order | TRUE
-3. Item being added in the bag does not match the POS order | FALSE
-4. Item being removed from the bag matches the POS order | FALSE
-5. Item being removed from the bag does not match the POS order | TRUE
-6. The order has been fulfilled and ready to give to customer | "order-complete"
+| Use Case | BL Result |
+| --------------- | --- |
+| 1. A new Customers' order is created in POS system and is in need of being fulfilled | No result returned |
+| 2. Item being added in the bag matches the POS order | TRUE |
+| 3. Item being added in the bag does not match the POS order | FALSE |
+| 4. Item being removed from the bag matches the POS order | FALSE |
+| 5. Item being removed from the bag does not match the POS order | TRUE |
+| 6. The order has been fulfilled and ready to give to customer | "order-complete" |
 
 
 ## Preparing your image
