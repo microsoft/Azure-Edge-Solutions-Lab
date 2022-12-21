@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bl-client
+  labels:
+    app: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image:  <path-to-container>
+          volumeMounts:
+            - name: azedge-spiffe-agent-socket
+              mountPath: /run/azedge/sockets/
+      imagePullSecrets:
+        - name: <name-of-secret-required-if-container-pull-needs-username-password>
+      volumes:
+        - name: azedge-spiffe-agent-socket
+          hostPath:
+            path: /run/azedge/sockets/
+            type: DirectoryOrCreate
