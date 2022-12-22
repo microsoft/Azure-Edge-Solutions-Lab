@@ -1,0 +1,139 @@
+## This is the on-prem deployment yaml file containing the following deployments-
+# 1. Flask Web Application
+# 2. EdgeAI inferencing container based on Nvidia Deepstream
+# 3. Business Logic Application 
+# 4. Point of Sale Application
+
+# Deployment for the Flask App
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-webapp
+  namespace: contoso
+  labels: 
+    app: webapp
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers: 
+      - name: webapp
+        image: <path-to-container>
+        ports:
+        - containerPort: 5000
+      imagePullSecrets:
+      - name: <name-of-secret-required-if-container-pull-needs-username-password>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: contoso-webapp-service
+  namespace: contoso
+spec:
+  type: LoadBalancer
+  selector:
+    app: webapp
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+---
+# Deployment for the Edgeai Container based on Nvidia Deepstream
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-edgeai
+  namespace: contoso
+  labels: 
+    app: edgeai
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: edgeai
+  template:
+    metadata:
+      labels:
+        app: edgeai
+    spec:
+      containers: 
+      - name: edgeai
+        image: "aya65535/oa:v29"
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+---  
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service4
+spec:
+  selector:
+    app: webapp
+  ports:
+      # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+    - port: 5000
+      targetPort: 5000
+---
+
+# Deployment for the Business Logic Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bl-client
+  namespace: contoso
+  labels:
+    app: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: <path-to-container>
+          volumeMounts:
+            - name: azedge-spiffe-agent-socket
+              mountPath: /run/azedge/sockets/
+      imagePullSecrets:
+        - name: <name-of-secret-required-if-container-pull-needs-username-password>
+      volumes:
+        - name: azedge-spiffe-agent-socket
+          hostPath:
+            path: /run/azedge/sockets/
+            type: DirectoryOrCreate
+---
+# Deployment for the Point of Sale Application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contoso-pos
+  namespace: contoso
+  labels:
+    app: pos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pos
+  template:
+    metadata:
+      labels:
+        app: pos
+    spec:
+      containers:
+      - name: point-of-sale
+        image: <path-to-container>
+      imagePullSecrets:
+        - name: <name-of-secret-required-if-container-pull-needs-username-password>
