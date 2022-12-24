@@ -1,0 +1,8 @@
+bag
+Cheeseburger
+Chicken Nuggets
+Chicken Sandwich
+Fish Sandwich
+French Fries
+Soda
+Spicy Chicken Sandwich
