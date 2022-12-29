@@ -75,7 +75,7 @@ kubectl get services -n <namespace>
 ```
 ![svc_name](images/svc-name.png)
 
-2. Modify the variable in the items_tracking.py according to the service name (ex: contoso-webapp-service) you got from the command above 
+2. Modify the variable [`SVC`](https://github.com/microsoft/Azure-Edge-Solutions-Lab/blob/main/Edgezone-QSR%20Demo/Edge%20AI%20App/items_tracking.py#L15) in the items_tracking.py according to the service name (ex: contoso-webapp-service) you got from the command above 
 ```
 SVC = 'http://<your service name>'
 ```
