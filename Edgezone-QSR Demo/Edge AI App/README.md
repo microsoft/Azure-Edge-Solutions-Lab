@@ -21,17 +21,16 @@ Edge AI App
 │   ├── is_aarch_64.py
 │   └── utils.py
 ├── configs
-│   └── pgies
-│       ├── model_configs
-│       │   ├── dstest2_pgie_config_oa.txt
-│       │   ├── labels.txt
-│       │   ├── libnvdsinfer_custom_impl_Yolo_35.so
-│       │   ├── model.onnx
-│       │   └── model.onnx_b1_gpu0_fp32.engine
-│       └── tracker_configs
-│           ├── config_tracker_NvDCF_perf.yml
-│           ├── dstest2_tracker_config.txt
-│           └── tracker_config.yml
+│   ├── model_configs
+│   │   ├── dstest2_pgie_config_oa.txt
+│   │   ├── labels.txt
+│   │   ├── libnvdsinfer_custom_impl_Yolo_35.so
+│   │   ├── model.onnx
+│   │   └── model.onnx_b1_gpu0_fp32.engine
+│   └── tracker_configs
+│       ├── config_tracker_NvDCF_perf.yml
+│       ├── dstest2_tracker_config.txt
+│       └── tracker_config.yml
 └── streams
     └── Mcdonalds_receipt_v01.h264
 ```
