@@ -62,7 +62,7 @@ The instructions below describe how to obtain the model files and data files in 
    2. Build your custom parser library `libnvdsinfer_custom_impl_Yolo_35.so` as [here](https://github.com/leannhuang/custom-vision-parser-lib-for-nvidia-deepstream)
       1. You may be interested in modifying the [nvdsparsebbox_Yolo.cpp](https://github.com/leannhuang/custom-vision-parser-lib-for-nvidia-deepstream/blob/main/amd64/cv/nvdsparsebbox_Yolo.cpp). If so, you can modify the Non-Maximal Suppression Threshold [kNMS_THRESH](https://github.com/leannhuang/custom-vision-parser-lib-for-nvidia-deepstream/blob/main/amd64/cv/nvdsparsebbox_Yolo.cpp#L463) and Confidence Threshold [kPROB_THRESH](https://github.com/leannhuang/custom-vision-parser-lib-for-nvidia-deepstream/blob/main/amd64/cv/nvdsparsebbox_Yolo.cpp#L464) to tune your model for better accuracy.
 
-### data(optional) 
+### Data(optional) 
 **These steps are optional as the video file are already included in the repository.**
 1. Transform the video file you want to inference to h264 format and put it under streams folder
 2. Modify the video file name in the Dockerfile
@@ -92,6 +92,7 @@ docker build -t edgeai .
 docker run -it --gpus all edgeai
 ```
 3. You should be able to see the result as below
+
 ![log](images/log.png)
 
 ## Push the docker image to ACR or docker hub
