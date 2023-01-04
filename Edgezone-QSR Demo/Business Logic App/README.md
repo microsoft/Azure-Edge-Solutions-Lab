@@ -11,7 +11,7 @@ There are six business scenarios we have accounted for in this client:
 6. The order has been fulfilled and ready to give to customer
 
 The following image depects the processes logic.
-![image](https://user-images.githubusercontent.com/47536604/208718819-ced8742a-7672-434e-b446-75744229acb6.png)
+![image](https://user-images.githubusercontent.com/47536604/210615521-8f4e45d6-132a-4e6e-862b-f1c3c18f9353.png)
 
 A sample order would look as follows:
 ```json
