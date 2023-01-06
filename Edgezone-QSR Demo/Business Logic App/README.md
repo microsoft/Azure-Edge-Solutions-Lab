@@ -25,7 +25,7 @@ A sample order would look as follows:
         }]
 }
 ```
-A sample inference result/action:
+A sample inference result or action:
 ```json
 {
     "bag_no": 1, 
