@@ -74,11 +74,11 @@ The business logic client will process the six use cases and return the followin
 
 ## Creating a secret on K8s cluster
 
-Run the following kubectl command on your K8s cluster
+1. Run the following kubectl command on your K8s cluster
 
 `kubectl create secret docker-registry <secret-name> --namespace <namespace> --docker-server=<container-registry-name>.azurecr.io --docker-username=<service-principal-ID>     --docker-password=<service-principal-password>`
 
-Once the secret is created you can use it in the yaml file-
+2. Once the secret is created you can use it in the yaml file-
 
 ```
 imagePullSecrets:
@@ -94,7 +94,7 @@ Using the kubectl command on the K8s cluster running on the edgezone
 `kubectl apply -f BL-client.yaml`
 
 ### Option 2: From Azure Arc
-TO-DO
+Navigate into the cluster pods. Click add new pod and paste in the BL-client.yaml code. Submit.
 
 
 
