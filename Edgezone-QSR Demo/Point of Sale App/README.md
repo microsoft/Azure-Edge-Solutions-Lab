@@ -34,11 +34,11 @@ A sample order would look as follows-
 
 ## Creating a secret on K8s cluster
 
-Run the following kubectl command on your K8s cluster
+1. Run the following kubectl command on your K8s cluster
 
 `kubectl create secret docker-registry <secret-name> --namespace <namespace> --docker-server=<container-registry-name>.azurecr.io --docker-username=<service-principal-ID> --docker-password=<service-principal-password>`
 
-Once the secret is created you can use it in the yaml file-
+2. Once the secret is created you can use it in the yaml file-
 
 ```
 imagePullSecrets:
