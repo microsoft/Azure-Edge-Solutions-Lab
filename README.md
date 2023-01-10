@@ -3,7 +3,7 @@
 Welcome to the Azure Edge Solutions Lab GitHub Page.
 
 
-In this repo you will find the following Labs:
+This repo includes the following Labs:
 
 Lab | Description
 --- | ---
