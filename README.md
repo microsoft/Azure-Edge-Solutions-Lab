@@ -1,6 +1,6 @@
 # Welcome
 
-Welcome to the Azure Edge Solutions Lab GitHub Page
+Welcome to the Azure Edge Solutions Lab GitHub Page.
 
 
 In this repo you will find the following Labs:
