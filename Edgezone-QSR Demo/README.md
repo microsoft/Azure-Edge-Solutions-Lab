@@ -120,7 +120,15 @@ Run the following command on your edge K8s cluster to get the IP address to acce
 
 From all the results copy the `EXTERNAL-IP` of `contoso-webapp-service`. Open a web browser window and go to `http://<EXTERNAL-IP>:5000`
 
-## 7. Configure GitOps
+## 7. Configure GitOps (Optional)
+In this section you will configure GitOps. GitOps is an operational framework for Kubernetes cluster management and application delivery. GitOps applies development practices like version control, collaboration, compliance, and continuous integration/continuous deployment (CI/CD) to infrastructure automation.
 
+1. Go to your K8s cluster on the Azure Portal. On the left column select `GitOps` under `Settings`, then click `Create`. This will initiate the GitOps configuration creation process.
+2. On the `Basics` tab give the configuration a name under `Configuration name`. For `Namespace` use `contoso` as that is what we have used in all the files provided in this repository. The `scope` is `Namespace`. Leave everthing else unchanged and click `Next`.
+3. On the `Source` tab enter the GitHub `Repository URL` that you want to configure. Specify the `Reference Type` as `Branch` and for `Branch` add the branch name to monitor. Specify the `Repository type` as either `Private` or `Public` depending on your GitHub repository. Under `Sync configuration` change `Sync interval (minutes)` to `1`. Now click `Next`.
+4. On the `Kustomization` tab click `+ Create`, this will open a section on the right. Give your kustomization a name under `Instance name`. For `Path`, add the complete path location to the YAML configuration, for example `./contoso-app/yaml-file`. Enable `Prune`. Leave everything else unchanged and click `Save`, then click `Next`.
+5. On the `Review + create` tab, verify all fields are as mentioned, then click `Create`. In a few moments the GitOps configuration will be created.
+6. Once the GitOps configuration is successfully created you can make changes to the YAML file and verify that this triggers a new deployment, old pods are stopped and new ones are created depending on the changes that were made.  
 ## 8. Cleanup Resources
-To-do
+1. Delete all your deployments via `K8s - Azure Arc` on the `Azure Portal`.
+2. Delete the K8s clusters from Windows Admin Center (WAC).
