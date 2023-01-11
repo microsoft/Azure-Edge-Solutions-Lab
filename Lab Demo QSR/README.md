@@ -29,7 +29,7 @@ Follow the Microsoft Learn documents to configure your two-node cluster:
 [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 
 # 3. Configuring ARC and AKS on AzSHCI
-When setting up AKS you will perform the steps to initially set up the AKS Management cluster and reserve IPs for all the Worker Clusters, then you will proceed to step below _Creating AI Workload AKS Cluster_. Work with your networking engineers to reserve a block of IP addresses and ensure you have vSwitch created. Gateway and DNS Servers can be found by looking at setting of the vSwitch in WAC. 
+When setting up AKS you will perform the steps to initially set up the AKS Management cluster and reserve IPs for all the Worker Clusters, then you will proceed to step below _Creating AI Workload AKS Cluster_. Work with your networking engineers to reserve a block of IP addresses and ensure you have vSwitch created. Gateway and DNS Servers can be found by looking at setting of the vSwitch in WAC. Below is an example when configuring with Static IP. 
 ## Here is the Engineering Plan used for our E2E Demo:
 
 > 
