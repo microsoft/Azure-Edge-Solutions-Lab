@@ -33,26 +33,27 @@ When setting up AKS you will perform the steps to initially set up the AKS Manag
 ## Here is the Engineering Plan used for our E2E Demo:
 
 > 
-> Subnet prefix: 172.23.30.0/24
-> 
-> Gateway: 172.23.30.1
-> 
-> DNS Servers:
-> 
->	172.22.1.9
->	
->	172.22.3.9
->	
-> Cloud agent IP – 172.23.30.151
-> 
-> Virtual IP address pool start – 172.23.30.152
-> 
-> Virtual IP address pool end – 172.23.30.172
-> 
-> Kubernetes node IP pool start – 172.23.30.173
-> 
-> Kubernetes node IP pool end – 172.23.30.193
-> 
+> Host configuration
+> Management cluster name:               aks-management-cluster-1
+> Folder to store VM images:                C:\ClusterStorage\Volume01
+> Virtual network name:                        aks-default-network
+> Internet-connected virtual switch:   lab-Vswitch
+> VLAN ID                                                  0
+> Cloudagent IP                                       172.23.30.151
+> IP address allocation method            Static (Recommended)
+> Subnet prefix                                        172.23.30.0/24
+> Gateway                                                172.23.30.1
+> DNS servers                                          172.22.1.9,172.22.3.9
+> Virtual IP pool start                             172.23.30.152
+> Virtual IP pool end                              172.23.30.172
+> Kubernetes node IP pool start          172.23.30.173
+> Kubernetes node IP pool end           172.23.30.193
+> MAC address allocation                     Automatic
+
+> Azure registration
+> Azure subscription                            myAzureSubName
+> Resource group                                 edgeaiDemo2
+
 
 1. Prepare the 2-node cluster by installing AKS, follow this [PowerShell QuickStart Guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/kubernetes-walkthrough-powershell)
 2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup). Aside form Engineering plan above all other options were left default We did not use VLANs. 
