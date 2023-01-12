@@ -33,7 +33,7 @@ When setting up AKS you will perform the steps to initially set up the AKS Manag
 ## Here is the Engineering Plan used for our E2E Lab:
 
 > 
-> "Host configuration"
+> **Host configuration**
 > 
 > Management cluster name:	aks-management-cluster-1
 > 
@@ -75,7 +75,7 @@ When setting up AKS you will perform the steps to initially set up the AKS Manag
 
 
 1. Prepare the 2-node cluster by installing AKS, follow this [PowerShell QuickStart Guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/kubernetes-walkthrough-powershell)
-2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup). Aside form Engineering plan above all other options were left default We did not use VLANs. 
+2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup). Aside form Engineering plan above all other options were left default We did not use VLANs. We worked with our IT Admin to block out 20 sub IP addresses and found the networking information on each node in the HCI cluster, in WAC under the virtual switch tool. Alternatively you can work with your IT Admin to build your Engineering Plan. 
 
 
 # 4. Creating AI Workload AKS Cluster
@@ -83,7 +83,39 @@ Now you have AKS and ARC installed in your management cluster. You need to creat
 ## Create AI Workload Cluster
 Follow [instructions](https://learn.microsoft.com/en-us/azure/aks/hybrid/create-kubernetes-cluster) to create a cluster named: AI Workload
 We stood up a 3 node AKS cluster.
-
+>
+> Basic
+> Connection to Azure Arc:Enabled
+>
+> Azure subscription: <myAzureSub>
+> 
+> Resource group: edgeaiDemo2
+>
+> Kubernetes cluster name: ai1-workload-cluster
+>
+> Azure Kubernetes Service hybrid host: <AKSHCI cluster host name>
+>
+> Cluster admin group or user name: <domain>\<user>
+>
+> Kubernetes version: v1.24.6
+>
+> Load balancer node size: Standard_D4s_v3 (16 GB Memory, 4 CPU)
+>
+> ###Node pools
+> Node pools: 1
+>
+> Authentication: AD authentication Disabled
+>
+> ###Networking
+>
+> Network configuration: flannel
+>
+> Load balancer: Standard
+> 
+> Network policy: none
+>
+>
+	
 ## Create a GPU Pool and attach GPUs to AI Workload Nodes
 Once your AI Workload cluster is created, go to WAC Cluster Manager, and look at VM list. Take note of VM names for the AI Workload.
 
