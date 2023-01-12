@@ -100,13 +100,19 @@ We stood up a 3 node AKS cluster.
 > Kubernetes version: v1.24.6
 >
 > Load balancer node size: Standard_D4s_v3 (16 GB Memory, 4 CPU)
+>	
+> Load balancer node count: 1
 >
-> ###Node pools
+> Control plane node size: Standard_A4_v2 (8 GB Memory, 4 CPU)
+>
+> Control plane node count: 1
+>
+> Node pools
 > Node pools: 1
 >
 > Authentication: AD authentication Disabled
 >
-> ###Networking
+> Networking
 >
 > Network configuration: flannel
 >
