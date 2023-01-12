@@ -55,7 +55,7 @@ When setting up AKS you will perform the steps to initially set up the AKS Manag
 > 
 
 1. Prepare the 2-node cluster by installing AKS, follow this [PowerShell QuickStart Guide](https://learn.microsoft.com/en-us/azure/aks/hybrid/kubernetes-walkthrough-powershell)
-2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup)
+2. Alternatively, you could setup with WAC. The demo was created with Static-IPs from the above Engineering plan. [AKS using WAC](https://learn.microsoft.com/en-us/azure/aks/hybrid/setup). Aside form Engineering plan above all other options were left default We did not use VLANs. 
 
 
 # 4. Creating AI Workload AKS Cluster
