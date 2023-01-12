@@ -33,9 +33,9 @@ When setting up AKS you will perform the steps to initially set up the AKS Manag
 ## Here is the Engineering Plan used for our E2E Lab:
 
 > 
-> *Host configuration*
+> "Host configuration"
 > 
-> Management cluster name:               aks-management-cluster-1
+> Management cluster name:	aks-management-cluster-1
 > 
 > Folder to store VM images:                C:\ClusterStorage\Volume01
 > 
