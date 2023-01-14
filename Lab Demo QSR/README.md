@@ -12,7 +12,7 @@ This reference solution is intended to give customers and partners an example of
 5. Integrating with GitHub
 6. Deploy AI Workload
 7. Validate E2E Solution Working
-8. Cleanup Resources
+8. Cleanup all Resources
 
 
 # 1. Prerequisites
