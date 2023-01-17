@@ -8,7 +8,7 @@ Azure Edge zone will also run AKS and ARC, but will be a cloud offering located 
 Step 1 | Step 2 | Step 3 | Step 4 
 -----|-----|-----|-----
 ![image](https://user-images.githubusercontent.com/47536604/212991641-0c7e182c-1665-4bfb-8634-7341d49302f6.png) | ![image](https://user-images.githubusercontent.com/47536604/212991772-8d60b298-a2fa-4d5a-b6b7-86c022d49bd9.png) | ![image](https://user-images.githubusercontent.com/47536604/212992057-a52daa70-c99b-4511-a571-53cb0bc3a522.png) | ![image](https://user-images.githubusercontent.com/47536604/212993518-de503e29-8270-4257-a265-ffa4217be8f6.png)
-
+All modular services run on-prem on AKS on HCI and Edge Zone infa built | Modify on-prem deployment by removing BL pod and update AI deployment | Deploy BL pod to Edge Zone | Review deployment
 
 
 
@@ -22,6 +22,7 @@ Step 1 | Step 2 | Step 3 | Step 4
 	* 1.d Build Business Logic Application
 	* 1.e. Deploy app modules to your edge K8s cluster
 	* 1.f. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
+	* 1.g. Configure integrated GitOps (Optional)
 * Step 2. Modify Store 1 deployment
 * Step 3. Deploy to AKS on Azure EdgeZone
 * Step 4. Validate E2E Solution Working
@@ -108,6 +109,15 @@ The on-prem deployment is on your K8s cluster deployed at the Edge (Store 1). Th
 3. Business Logic Application - analyzes inference data and sends back results to the Flask web server.
 4. Point of Sale Application - sends orders to Flask web application and Business Logic Application.
 
+### Step 1.g. Configure integrated GitOps (Optional)
+In this section you will configure GitOps. GitOps is an operational framework for Kubernetes cluster management and application delivery. GitOps applies development practices like version control, collaboration, compliance, and continuous integration/continuous deployment (CI/CD) to infrastructure automation.
+
+1. Go to your K8s cluster on the Azure Portal. On the left column select `GitOps` under `Settings`, then click `Create`. This will initiate the GitOps configuration creation process.
+2. On the `Basics` tab give the configuration a name under `Configuration name`. For `Namespace` use `contoso` as that is what we have used in all the files provided in this repository. The `scope` is `Namespace`. Leave everthing else unchanged and click `Next`.
+3. On the `Source` tab enter the GitHub `Repository URL` that you want to configure. Specify the `Reference Type` as `Branch` and for `Branch` add the branch name to monitor. Specify the `Repository type` as either `Private` or `Public` depending on your GitHub repository. Under `Sync configuration` change `Sync interval (minutes)` to `1`. Now click `Next`.
+4. On the `Kustomization` tab click `+ Create`, this will open a section on the right. Give your kustomization a name under `Instance name`. For `Path`, add the complete path location to the YAML configuration, for example `./contoso-app/yaml-file`. Enable `Prune`. Leave everything else unchanged and click `Save`, then click `Next`.
+5. On the `Review + create` tab, verify all fields are as mentioned, then click `Create`. In a few moments the GitOps configuration will be created.
+6. Once the GitOps configuration is successfully created you can make changes to the YAML file and verify that this triggers a new deployment, old pods are stopped and new ones are created depending on the changes that were made.  
 
 ## Step 2. Deploy to AKS on Azure EdgeZone
 For this deployment you will remove the `Business Logic Application` from the edge and move it the edgezone. 
@@ -132,15 +142,7 @@ Run the following command on your edge K8s cluster to get the IP address to acce
 
 From all the results copy the `EXTERNAL-IP` of `contoso-webapp-service`. Open a web browser window and go to `http://<EXTERNAL-IP>:5000`
 
-## 7. Configure GitOps (Optional)
-In this section you will configure GitOps. GitOps is an operational framework for Kubernetes cluster management and application delivery. GitOps applies development practices like version control, collaboration, compliance, and continuous integration/continuous deployment (CI/CD) to infrastructure automation.
 
-1. Go to your K8s cluster on the Azure Portal. On the left column select `GitOps` under `Settings`, then click `Create`. This will initiate the GitOps configuration creation process.
-2. On the `Basics` tab give the configuration a name under `Configuration name`. For `Namespace` use `contoso` as that is what we have used in all the files provided in this repository. The `scope` is `Namespace`. Leave everthing else unchanged and click `Next`.
-3. On the `Source` tab enter the GitHub `Repository URL` that you want to configure. Specify the `Reference Type` as `Branch` and for `Branch` add the branch name to monitor. Specify the `Repository type` as either `Private` or `Public` depending on your GitHub repository. Under `Sync configuration` change `Sync interval (minutes)` to `1`. Now click `Next`.
-4. On the `Kustomization` tab click `+ Create`, this will open a section on the right. Give your kustomization a name under `Instance name`. For `Path`, add the complete path location to the YAML configuration, for example `./contoso-app/yaml-file`. Enable `Prune`. Leave everything else unchanged and click `Save`, then click `Next`.
-5. On the `Review + create` tab, verify all fields are as mentioned, then click `Create`. In a few moments the GitOps configuration will be created.
-6. Once the GitOps configuration is successfully created you can make changes to the YAML file and verify that this triggers a new deployment, old pods are stopped and new ones are created depending on the changes that were made.  
 
 ## Step 5. Cleanup Resources
 1. Delete all your deployments via `K8s - Azure Arc` on the `Azure Portal`.
