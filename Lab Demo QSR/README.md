@@ -250,9 +250,18 @@ kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.
 	
 
 # 5. Integrating with GitHub
-1. Follow the [QuickStart](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2) to configure your ARC enabled AKS cluster with GitHub using Flux.
+
+In this section you will configure GitOps. GitOps is an operational framework for Kubernetes cluster management and application delivery. GitOps applies development practices like version control, collaboration, compliance, and continuous integration/continuous deployment (CI/CD) to infrastructure automation. Further reading can be found on the Microsoft Docs page:[QuickStart](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2) to configure your ARC enabled AKS cluster with GitHub using Flux.
 
 Remember to have the Kubernetes default namespace identified in your deployment yaml.
+
+
+1. Go to your K8s cluster on the Azure Portal. On the left column select `GitOps` under `Settings`, then click `Create`. This will initiate the GitOps configuration creation process.
+2. On the `Basics` tab give the configuration a name under `Configuration name`. For `Namespace` use `contoso` as that is what we have used in all the files provided in this repository. The `scope` is `Namespace`. Leave everthing else unchanged and click `Next`.
+3. On the `Source` tab enter the GitHub `Repository URL` that you want to configure. Specify the `Reference Type` as `Branch` and for `Branch` add the branch name to monitor. Specify the `Repository type` as either `Private` or `Public` depending on your GitHub repository. Under `Sync configuration` change `Sync interval (minutes)` to `1`. Now click `Next`.
+4. On the `Kustomization` tab click `+ Create`, this will open a section on the right. Give your kustomization a name under `Instance name`. For `Path`, add the complete path location to the YAML configuration, for example `./contoso-app/yaml-file`. Enable `Prune`. Leave everything else unchanged and click `Save`, then click `Next`.
+5. On the `Review + create` tab, verify all fields are as mentioned, then click `Create`. In a few moments the GitOps configuration will be created.
+6. Once the GitOps configuration is successfully created you can make changes to the YAML file and verify that this triggers a new deployment, old pods are stopped and new ones are created depending on the changes that were made.
 
 
 # 6. Deploy AI Workload
