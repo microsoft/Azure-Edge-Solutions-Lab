@@ -29,6 +29,7 @@ https://github.com/microsoft/Azure-Edge-Solutions-Lab#configuring-arc-and-aks-on
 
 ## 1. Preparing AKS in an Azure EdgeZone
 
+Azure Edge Zone with Operators (Public MEC) is Generally Availalbe and allows Customers to development distributed applications across cloud, on-premises, and edge using the same Azure Portal, APIs, development, and security tools. ![image](https://user-images.githubusercontent.com/47536604/212989224-d3a5d81f-a28b-4add-88d2-859bda1e7c46.png)
 In Azure Portal, open CLI and switch to Bash shell
 	
 `az account set --subscription <Azure Subscription ID> myAKSCluster=<your AKS cluster name> myResourceGroup=<your resource group name>`
