@@ -13,16 +13,17 @@ Step 1 | Step 2 | Step 3 | Step 4
 
 
 ### Major sections of this E2E tutorial:
-1. Prerequisites
-2. Preparing AKS in an Azure EdgeZone
-3. Configuring ARC on Azure EdgeZone AKS
-4. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
-5. Modify Store 1 deployment
-6. Deploy to AKS on Azure EdgeZone
-7. Validate E2E Solution Working
-8. Cleanup Resources
+Step 0. Prerequisites
+Step 1. Preparing AKS in an Azure EdgeZone
+	 1.a. Configuring ARC on Azure EdgeZone AKS
+	 1.b. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
+	 1.c. Deploy app modules to your edge K8s cluster
+Step 2. Modify Store 1 deployment
+Step 3. Deploy to AKS on Azure EdgeZone
+Step 4. Validate E2E Solution Working
+Step 5. Cleanup Resources
 
-## Prerequisites
+## Step 0. Prerequisites
 
 Please refer to previous lab on setting up the two-node AzS HCI cluster and deploying AKS.
 
@@ -30,7 +31,7 @@ https://github.com/microsoft/Azure-Edge-Solutions-Lab#preparing-azshci---2-node-
 
 https://github.com/microsoft/Azure-Edge-Solutions-Lab#configuring-arc-and-aks-on-azshci
 
-## 1. Preparing AKS in an Azure EdgeZone
+## Step 1. Preparing AKS in an Azure EdgeZone
 
 Azure Edge Zone with Operators (Public MEC) is Generally Availalbe and allows Customers to development distributed applications across cloud, on-premises, and edge using the same Azure Portal, APIs, development, and security tools. ![image](https://user-images.githubusercontent.com/47536604/212989224-d3a5d81f-a28b-4add-88d2-859bda1e7c46.png)
 
@@ -46,7 +47,7 @@ In Azure Portal, open CLI and switch to Bash shell
 `az aks create --name $myAKSCluster --resource-group $myResourceGroup --kubernetes-version 1.22.11  --edge-zone <edge zone name> --location <edge zone loacation>`
 
 
-## 2. Configuring ARC on Azure EdgeZone AKS
+### Step 1.a. Configuring ARC on Azure EdgeZone AKS
 https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-cluster?tabs=azure-cli
  
 1. Register providers with ARC service
@@ -60,32 +61,22 @@ https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-
 		
 `az connectedk8s connect --name $myAKSCluster --resource-group $myResourceGroup`
 
-## 3. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
-The on-prem deployment is on your K8s cluster deployed at the Edge (Store 1). The deployment consists of the following components-
-1. Flask Web application - sink for incoming inference and result data.
-2. EdgeAI Applicaiton - container trained on the order accuracy model.
-3. Business Logic Application - analyzes inference data and sends back results to the Flask web server.
-4. Point of Sale Application - sends orders to Flask web application and Business Logic Application.
-
 ### Build Flask Web Application
 1. Go to the `Flask App` folder and complete the steps in the README to prepare your Flask-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/flask-app:v1`
 2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
 3. Go back to the `Flask App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
 4. Open the `on-prem-deployment.yaml` file and find the deployment for the Flask Web application and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3. 
 
-### Build Point of Sale Application
-1. Go to the `Point of Sale App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/pos-app:v1`
-2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
-3. Go back to the `Point of Sale App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
-4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3. 
+### Step 1.b. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
+The on-prem deployment is on your K8s cluster deployed at the Edge (Store 1). The deployment consists of the following components-
+1. Flask Web application - sink for incoming inference and result data.
+2. EdgeAI Applicaiton - container trained on the order accuracy model.
+3. Business Logic Application - analyzes inference data and sends back results to the Flask web server.
+4. Point of Sale Application - sends orders to Flask web application and Business Logic Application.
 
-### Build Business Logic Application
-1. Go to the `Business Logic App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/bl-client:v1`
-2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
-3. Go back to the `Business Logic App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
-4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3.
 
-## Deploy to your edge K8s cluster
+
+### Step 1.c. Deploy app modules to your edge K8s cluster
 Run the following command on your edge K8s cluster -
 
 `kubectl create -f on-prem-deployment.yaml`
@@ -102,8 +93,20 @@ Run the following command to delete the on-prem deployment
 
 `kubectl delete -f on-prem-deployment.yaml`
 
+#### Step 1.c.1. Build Point of Sale Application
+1. Go to the `Point of Sale App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/pos-app:v1`
+2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
+3. Go back to the `Point of Sale App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
+4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3. 
 
-## 4. Deploy to AKS on Azure EdgeZone
+#### Step 1.c.2 Build Business Logic Application
+1. Go to the `Business Logic App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/bl-client:v1`
+2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
+3. Go back to the `Business Logic App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
+4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3.
+
+
+## Step 2. Deploy to AKS on Azure EdgeZone
 For this deployment you will remove the `Business Logic Application` from the edge and move it the edgezone. 
 
 Open the `edgezone-deployment.yaml` file and update the `<path-to-container>` with the path to the Business Logic App from section 3. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created for the Business Logic App in section 3.
@@ -112,14 +115,14 @@ Go to the edgezone K8s cluster and run the following command to deploy the `Busi
 
 `kubectl create -f edgezone-deployment.yaml`
 
-## 5. Modify Store 1 deployment
+## Step 3. Modify Store 1 deployment
 Open the `edge-deployment.yaml` file and update the `<path-to-container>` and `<name-of-secret-required-if-container-pull-needs-username-password>` with the values you created for all applications in section 3.
 
 Go to the edge K8s cluster and run the following command to deploy `Flask App`, `edgeAI` and `Point of Sale App` -
 
 `kubectl create -f edge-deployment.yaml`
 
-## 6. Validate E2E Solution Working
+## Step 4. Validate E2E Solution Working
 Run the following command on your edge K8s cluster to get the IP address to access the frontend UI/UX 
 
 `kubectl get svc --all-namespaces`
@@ -135,6 +138,7 @@ In this section you will configure GitOps. GitOps is an operational framework fo
 4. On the `Kustomization` tab click `+ Create`, this will open a section on the right. Give your kustomization a name under `Instance name`. For `Path`, add the complete path location to the YAML configuration, for example `./contoso-app/yaml-file`. Enable `Prune`. Leave everything else unchanged and click `Save`, then click `Next`.
 5. On the `Review + create` tab, verify all fields are as mentioned, then click `Create`. In a few moments the GitOps configuration will be created.
 6. Once the GitOps configuration is successfully created you can make changes to the YAML file and verify that this triggers a new deployment, old pods are stopped and new ones are created depending on the changes that were made.  
-## 8. Cleanup Resources
+
+## Step 5. Cleanup Resources
 1. Delete all your deployments via `K8s - Azure Arc` on the `Azure Portal`.
 2. Delete the K8s clusters from Windows Admin Center (WAC).
