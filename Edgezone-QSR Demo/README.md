@@ -13,15 +13,16 @@ Step 1 | Step 2 | Step 3 | Step 4
 
 
 ### Major sections of this E2E tutorial:
-Step 0. Prerequisites
-Step 1. Preparing AKS in an Azure EdgeZone
-	 1.a. Configuring ARC on Azure EdgeZone AKS
-	 1.b. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
-	 1.c. Deploy app modules to your edge K8s cluster
-Step 2. Modify Store 1 deployment
-Step 3. Deploy to AKS on Azure EdgeZone
-Step 4. Validate E2E Solution Working
-Step 5. Cleanup Resources
+<!--Ordered List0-->
+* Step 0. Prerequisites
+* Step 1. Preparing AKS in an Azure EdgeZone
+	* 1.a. Configuring ARC on Azure EdgeZone AKS
+	* 1.b. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
+	* 1.c. Deploy app modules to your edge K8s cluster
+* Step 2. Modify Store 1 deployment
+* Step 3. Deploy to AKS on Azure EdgeZone
+* Step 4. Validate E2E Solution Working
+* Step 5. Cleanup Resources
 
 ## Step 0. Prerequisites
 
