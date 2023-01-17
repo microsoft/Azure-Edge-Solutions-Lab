@@ -5,6 +5,13 @@ The EdgeZone Quick Service Restaurant (QSR) Lab is intended to guide users in th
 On-prem is Store 1 which has a two node AzSHCI cluster with Kubernetes and ARC 
 Azure Edge zone will also run AKS and ARC, but will be a cloud offering located physically close to Store 1.
 
+Step 1 | Step 2 | Step 3 | Step 4 
+-----|-----|-----|-----
+![image](https://user-images.githubusercontent.com/47536604/212991641-0c7e182c-1665-4bfb-8634-7341d49302f6.png) | ![image](https://user-images.githubusercontent.com/47536604/212991772-8d60b298-a2fa-4d5a-b6b7-86c022d49bd9.png) | ![image](https://user-images.githubusercontent.com/47536604/212992057-a52daa70-c99b-4511-a571-53cb0bc3a522.png) | ![image](https://user-images.githubusercontent.com/47536604/212992381-839a6523-0d92-4613-a1fd-75437ef63c03.png)
+
+
+
+
 ![Before topology using Azure EdgeZone](https://user-images.githubusercontent.com/47536604/207954780-d8b06255-d483-4231-9090-d8eefa2eeb68.png)
 ![After topology using Azure EdgeZone](https://user-images.githubusercontent.com/47536604/207954839-ff205d65-8493-4b1c-b898-42dc919d3d0b.png)
 
@@ -30,6 +37,8 @@ https://github.com/microsoft/Azure-Edge-Solutions-Lab#configuring-arc-and-aks-on
 ## 1. Preparing AKS in an Azure EdgeZone
 
 Azure Edge Zone with Operators (Public MEC) is Generally Availalbe and allows Customers to development distributed applications across cloud, on-premises, and edge using the same Azure Portal, APIs, development, and security tools. ![image](https://user-images.githubusercontent.com/47536604/212989224-d3a5d81f-a28b-4add-88d2-859bda1e7c46.png)
+
+
 In Azure Portal, open CLI and switch to Bash shell
 	
 `az account set --subscription <Azure Subscription ID> myAKSCluster=<your AKS cluster name> myResourceGroup=<your resource group name>`
