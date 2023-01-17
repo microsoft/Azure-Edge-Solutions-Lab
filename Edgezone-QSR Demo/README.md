@@ -17,8 +17,11 @@ Step 1 | Step 2 | Step 3 | Step 4
 * Step 0. Prerequisites
 * Step 1. Preparing AKS in an Azure EdgeZone
 	* 1.a. Configuring ARC on Azure EdgeZone AKS
-	* 1.b. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
-	* 1.c. Deploy app modules to your edge K8s cluster
+	* 1.b. Build Flask Web Application
+	* 1.c. Build Point of Sale Application
+	* 1.d Build Business Logic Application
+	* 1.e. Deploy app modules to your edge K8s cluster
+	* 1.f. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
 * Step 2. Modify Store 1 deployment
 * Step 3. Deploy to AKS on Azure EdgeZone
 * Step 4. Validate E2E Solution Working
@@ -62,23 +65,26 @@ https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/quickstart-connect-
 		
 `az connectedk8s connect --name $myAKSCluster --resource-group $myResourceGroup`
 
-### Build Flask Web Application
+### Step 1.b. Build Flask Web Application
 1. Go to the `Flask App` folder and complete the steps in the README to prepare your Flask-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/flask-app:v1`
 2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
 3. Go back to the `Flask App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
 4. Open the `on-prem-deployment.yaml` file and find the deployment for the Flask Web application and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3. 
 
-### Step 1.b. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
-The on-prem deployment is on your K8s cluster deployed at the Edge (Store 1). The deployment consists of the following components-
-1. Flask Web application - sink for incoming inference and result data.
-2. EdgeAI Applicaiton - container trained on the order accuracy model.
-3. Business Logic Application - analyzes inference data and sends back results to the Flask web server.
-4. Point of Sale Application - sends orders to Flask web application and Business Logic Application.
+#### Step 1.c. Build Point of Sale Application
+1. Go to the `Point of Sale App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/pos-app:v1`
+2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
+3. Go back to the `Point of Sale App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
+4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3. 
 
+#### Step 1.d Build Business Logic Application
+1. Go to the `Business Logic App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/bl-client:v1`
+2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
+3. Go back to the `Business Logic App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
+4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3.
 
-
-### Step 1.c. Deploy app modules to your edge K8s cluster
-Run the following command on your edge K8s cluster -
+### Step 1.e. Deploy app modules to your edge K8s cluster
+Next we will deploy the Flask, Point of Sale, and Business Logic modules to AKS. Run the following command on your edge K8s cluster -
 
 `kubectl create -f on-prem-deployment.yaml`
 
@@ -94,17 +100,13 @@ Run the following command to delete the on-prem deployment
 
 `kubectl delete -f on-prem-deployment.yaml`
 
-#### Step 1.c.1. Build Point of Sale Application
-1. Go to the `Point of Sale App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/pos-app:v1`
-2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
-3. Go back to the `Point of Sale App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
-4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3. 
 
-#### Step 1.c.2 Build Business Logic Application
-1. Go to the `Business Logic App` folder and complete the steps in the README to prepare your pos-app image. Make sure you push the image to your Azure container registry. Get the path to this container which will be as follows - `<acr name>.azurecr.io/bl-client:v1`
-2. Make a note of your `Login Server`, `Username` and `password` from your Azure Container Registry.
-3. Go back to the `Business Logic App` folder and create a secret on K8s cluster following the steps in the README. Make a note of the name of your secret. 
-4. Open the `on-prem-deployment.yaml` file and update the `<path-to-container>` with the path from step 1. Now update the `<name-of-secret-required-if-container-pull-needs-username-password>` with the name of the secret you created in step 3.
+### Step 1.f. Reviewing Store 1 deployment on AKS on AkSHCI (on-prem)
+The on-prem deployment is on your K8s cluster deployed at the Edge (Store 1). The deployment consists of the following components-
+1. Flask Web application - sink for incoming inference and result data.
+2. EdgeAI Applicaiton - container trained on the order accuracy model.
+3. Business Logic Application - analyzes inference data and sends back results to the Flask web server.
+4. Point of Sale Application - sends orders to Flask web application and Business Logic Application.
 
 
 ## Step 2. Deploy to AKS on Azure EdgeZone
