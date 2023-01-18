@@ -8,7 +8,7 @@ Azure Edge zone will also run AKS and ARC, but will be a cloud offering located 
 Step 1 | Step 2 | Step 3 | Step 4 
 -----|-----|-----|-----
 ![image](https://user-images.githubusercontent.com/47536604/212991641-0c7e182c-1665-4bfb-8634-7341d49302f6.png) | ![image](https://user-images.githubusercontent.com/47536604/212991772-8d60b298-a2fa-4d5a-b6b7-86c022d49bd9.png) | ![image](https://user-images.githubusercontent.com/47536604/212992057-a52daa70-c99b-4511-a571-53cb0bc3a522.png) | ![image](https://user-images.githubusercontent.com/47536604/212993518-de503e29-8270-4257-a265-ffa4217be8f6.png)
-All modular services run on-prem on AKS on HCI and Edge Zone infa built | Modify on-prem deployment by removing BL pod and update AI deployment | Deploy BL pod to Edge Zone | Review deployment
+Deploy modular on-prem services on AKS and HCI; build Edge Zone infa | Modify on-prem deployment by removing BL pod and update AI deployment | Deploy BL pod to Edge Zone | Review deployment
 
 
 
