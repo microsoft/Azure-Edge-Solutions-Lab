@@ -137,7 +137,7 @@ Now that we have the GPUs assigned, we need to install Docker and the Nvidia plu
 1.Go to Docker page and find your respective binary. For this example, we use x86_64 docker-20.10.9.tgz.
 [Docker binaries](https://docs.docker.com/engine/install/binaries/#install-static-binaries)
 
-2. Get the Workload AI node IP address and connect using your rsa. When using WAC, these will be placed in your Cluster storage under volumes then AksHCI. You can run this from your dev machine command prompt, but ensure you are in the same folder as the rsa file. For command below we copied out the rsa file to dev machine and renamed to _akshci_rsa.xml_. Learn more at [Connect with SSH to Linux or Windows worker nodes](https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection)
+2. Get the Workload AI node IP address and connect using your rsa. When using WAC, these will be placed in your Cluster storage under volumes then AksHCI. You can run this from your dev machine command prompt, but ensure you are in the same folder as the rsa file. For command below we copied out the rsa file to dev machine and renamed to _akshci_rsa.xml_. Learn more at [Connect with SSH to Linux or Windows worker nodes, we are using Linux nodes]([https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection](https://learn.microsoft.com/en-us/azure/aks/hybrid/ssh-connection#use-ssh-to-connect-to-linux-worker-nodes))
 ```shell
 ssh -i $env:SYSTEMDRIVE\AksHci\.ssh\akshci_rsa clouduser@<IP Address of the Node>
 	
