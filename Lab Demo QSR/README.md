@@ -171,7 +171,10 @@ sudo cp docker/* /usr/bin/
 ```bash
 sudo dockerd & 
 ```
-![image](https://user-images.githubusercontent.com/47536604/216107404-6ea1b699-2658-44bf-9613-965ef062cc47.png)
+
+You should see the API listening once started, refrence image below.
+	
+![image](https://user-images.githubusercontent.com/47536604/216107603-80d40e7f-92d8-4b6a-b955-efab9c336497.png)
 
 	
 8. Installing the Nvidia GPU plugin. Go to Nvidia page for full set of instructions. 
