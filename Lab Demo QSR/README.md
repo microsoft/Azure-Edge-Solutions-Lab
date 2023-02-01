@@ -182,7 +182,7 @@ You should see the API listening once started, refrence image below.
 
 9. Update docker as default runtime by createing daemon.json
 ```bash
-sudo vim /etc/docker/daemon.json
+sudo nano /etc/docker/daemon.json
 ```
 
 10. Paste into newly created daemon.json file
