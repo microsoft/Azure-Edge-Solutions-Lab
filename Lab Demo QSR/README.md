@@ -171,6 +171,8 @@ sudo cp docker/* /usr/bin/
 ```bash
 sudo dockerd & 
 ```
+![image](https://user-images.githubusercontent.com/47536604/216107404-6ea1b699-2658-44bf-9613-965ef062cc47.png)
+
 	
 8. Installing the Nvidia GPU plugin. Go to Nvidia page for full set of instructions. 
 [GitHub - NVIDIA/k8s-device-plugin: NVIDIA device plugin for Kubernetes](https://github.com/NVIDIA/k8s-device-plugin#preparing-your-gpu-nodes)
