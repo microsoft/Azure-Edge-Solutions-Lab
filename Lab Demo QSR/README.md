@@ -121,7 +121,11 @@ We stood up a 3 node AKS cluster.
 > Network policy: none
 >
 >
-	
+
+
+## Accessing via ARC
+[Set up your service account token.](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/cluster-connect?tabs=azure-cli#service-account-token-authentication-option)
+
 ## Create a GPU Pool and attach GPUs to AI Workload Nodes
 Once your AI Workload cluster is created, go to WAC Cluster Manager, and look at VM list. Take note of VM names for the AI Workload.
 
