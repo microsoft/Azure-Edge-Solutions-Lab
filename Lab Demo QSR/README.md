@@ -213,7 +213,7 @@ sudo dockerd &
 
 12. Configure containerd. Open the config.toml file and paste in modification from step 13.
 ```bash
-sudo vim /etc/containerd/config.toml
+sudo nano /etc/containerd/config.toml
 ```
 
 13. Paste into file
