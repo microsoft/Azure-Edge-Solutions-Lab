@@ -16,7 +16,7 @@ This reference solution is intended to give customers and partners an example of
 
 
 # 1. Prerequisites
-For this E2E reference  solution you would need the following prerequisites:
+For this E2E reference solution you would need the following prerequisites:
 * 2 - node cluster [Deploy a 2-node cluster on AzSHCI](https://learn.microsoft.com/en-us/azure-stack/hci/deploy/create-cluster?tabs=use-network-atc-to-deploy-and-manage-networking-recommended)
 * [Azure subscription](https://azure.microsoft.com/free)
 * [Windows Admin Center](https://azure.microsoft.com/en-us/contact/azure-stack-hci/) 
