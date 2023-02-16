@@ -1,4 +1,4 @@
-# Reference Solution - EdgeAI running on AzS HCI using AKS and Arc
+# Reference Solution - EdgeAI running  on AzS HCI using AKS and Arc
 
 This reference solution is intended to give customers and partners an example of how one can deploy and manage an Edge AI workload by leveraging [certified AzSHCI hardware](https://azurestackhcisolutions.azure.microsoft.com/#/catalog) and using [AKS](https://learn.microsoft.com/en-us/azure/aks/hybrid/) and [ARC](https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/overview).  
 
