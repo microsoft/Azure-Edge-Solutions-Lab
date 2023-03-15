@@ -1,1 +1,0 @@
-place your onnx model trained from custom vision here
