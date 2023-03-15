@@ -1,0 +1,25 @@
+name: "secondary_classifier"
+platform: "onnxruntime_onnx"
+max_batch_size : 0
+input [
+ {
+    name: "data"
+    data_type: TYPE_FP32
+    format: FORMAT_NCHW
+    dims: [ 3, 224, 224]
+    reshape { shape: [ 1, 3, 224, 224 ] }
+ }
+]
+output [
+ {
+     name: "reshaper_output_0"
+     data_type: TYPE_FP32
+     dims: [1, 2, 1, 1]
+     label_filename: "labels.txt"
+ }
+
+]
+#optimization { execution_accelerators {
+#  gpu_execution_accelerator : [ { name : "tensorrt" } ]
+#}
+#}
