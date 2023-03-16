@@ -55,9 +55,9 @@ def inter_communi_pods(tb_dict, tb_to_counter, now):
         try:
             print(f'post request: table_id: {str(table_id)}, occupancy: {occupancy}, cleanliness: {cleanliness}, status: {status}, timestamp: {now}')
             #print(URL)
-            #resp = requests.post(URL, headers=headers, json={"id": "table_cleanliness", "table_id": 1, "state": 0, "timestamp": "03/03/2023 10:00:00"})
+            #resp = requests.post(URL, headers=headers, json={"id": "table_cleanliness", "table_id": str(table_id), "state": status, "timestamp": now)
             #print(f'http response status: {resp.ok}')
-            # time.sleep(1)
+            #time.sleep(1)
         
         except Exception as e: 
             print(e)
@@ -69,7 +69,6 @@ def tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter):
     now = datetime.now()
 
     while l_obj is not None:
-        print("========a new object=============")
         try:
             # Casting l_obj.data to pyds.NvDsObjectMeta
             obj_meta = pyds.NvDsObjectMeta.cast(l_obj.data)
@@ -92,9 +91,7 @@ def tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter):
                     label_obj = cls_meta.label_info_list
                     while label_obj is not None:
                         try:
-                            label_meta = pyds.NvDsLabelInfo.cast(label_obj.data)
-                            # print(f'obj_meta.object_id: {obj_meta.object_id}, obj_meta.obj_label: {obj_meta.obj_label}, label_meta.result_label: {label_meta.result_label}, label_meta.result_prob: {label_meta.result_prob}, label_meta.result_class_id: {label_meta.result_class_id}, bbox = ({x_start}, {y_start}), ({x_end}, {y_end})')
-                            
+                            label_meta = pyds.NvDsLabelInfo.cast(label_obj.data)                            
                             # ===== init table class ====
                             if label_meta.result_label != 'clean':
                                 tb_dict[obj_meta.object_id] = Table((x_start, y_start, x_end, y_end), obj_meta.object_id, False)
@@ -136,26 +133,19 @@ def tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter):
                     max_overlapped_area = overlapped_area
                     max_area_tb_id = tb_object_id
 
-            
-            # print(max_area_tb_id)
             # Update the overlapped field of the table to True if the bounding box of the table has the maximum overlapped area with the bounding box of the person
             if max_area_tb_id >= 0: 
                 tb_dict[max_area_tb_id].overlapped = True
-    
-        
-        #print(f'obj_meta.rect_params: {obj_meta.rect_params}')
-    print("===one obj list end====")
+ 
 
     for tb_object_id, table in tb_dict.items():
         table_state = tbid_to_counter[tb_object_id]
         if table.overlapped:
-            print("overlapped")
             table_state['counter'] += 1
         
         else:
             table_state['counter'] = 0
             if table_state['last_overlapped_ts']:
-                print(f"people left table {tb_object_id}")
                 delta = now - table_state['last_overlapped_ts']
                 if delta >  timedelta(seconds=lv_t_threshold):
                     print(f"table {tb_object_id} becomes unoccupied")
@@ -172,30 +162,5 @@ def tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter):
             table_state['status'] = 'Occupied'
             table_state['last_overlapped_ts'] = now
     
-    print("***********")
-    # update the table status 
-    # for id, tb in tbid_to_counter.items():
-    #     # consider the case if people leave for a while but haven't complete dinning
-    #     print(f'id: {id}')
-    #     tb_occupancy = tb['occupancy']
-    #     tb_last_overlapped_ts = tb['last_overlapped_ts']
-    #     print("tb['occupancy']")
-    #     print(tb_occupancy)
-    #     print("tb['last_overlapped_ts']")
-    #     print(tb_last_overlapped_ts)
-    #     if not tb['occupancy'] and tb['last_overlapped_ts']:
-    #         # time difference calculation
-    #         print("people left table")
-    #         delta = now - tb['last_overlapped_ts']
-    #         if delta <= timedelta(seconds=lv_t_threshold):
-    #             tb['status'] = 'Occupied'
-    #             continue
- 
-    #         if tb_dict[id].cleanliness:
-    #             tb['status'] = 'Clean'
-    #         else:
-    #             tb['status'] = 'Need_clean'
-
-
     inter_communi_pods(tb_dict, tbid_to_counter, now)
 
