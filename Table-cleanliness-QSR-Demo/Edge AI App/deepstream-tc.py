@@ -96,18 +96,15 @@ def osd_sink_pad_buffer_probe(pad, info, u_data):
     # Retrieve batch metadata from the gst_buffer
     # Note that pyds.gst_buffer_get_nvds_batch_meta() expects the
     # C address of gst_buffer as input, which is obtained with hash(gst_buffer)
-    # 從 gst_buffer 中檢索批處理元數據。 注意 pyds.gst_buffer_get_nvds_batch_meta() 期望 gst_buffer 的 C 地址作為輸入，這是通過 hash(gst_buffer) 獲得的
     batch_meta = pyds.gst_buffer_get_nvds_batch_meta(hash(gst_buffer))
     l_frame = batch_meta.frame_meta_list
     
     while l_frame is not None:
-        print("11111111 start a new frame 111111")
         try:
             # Note that l_frame.data needs a cast to pyds.NvDsFrameMeta
             # The casting also keeps ownership of the underlying memory
             # in the C code, so the Python garbage collector will leave
-            # it alone.
-            # 請注意，l_frame.data 需要轉換為 pyds.NvDsFrameMeta。 轉換還保留了 C 代碼中底層內存的所有權，因此 Python 垃圾收集器將不理會它。
+            # it alone.   
             frame_meta = pyds.NvDsFrameMeta.cast(l_frame.data)
         except StopIteration:
             break
@@ -119,16 +116,9 @@ def osd_sink_pad_buffer_probe(pad, info, u_data):
         
         tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter)
             
-            
-        
-
-                  
-
-        #print(f'-1 count: {obj_counter[-1]}')
         # Acquiring a display meta object. The memory ownership remains in
         # the C code so downstream plugins can still access it. Otherwise
         # the garbage collector will claim it when this probe function exits.
-        # 獲取顯示元對象。 內存所有權保留在 C 代碼中，因此下游插件仍然可以訪問它。 否則垃圾收集器將在該探測函數退出時認領它。
         display_meta = pyds.nvds_acquire_display_meta_from_pool(batch_meta)
         display_meta.num_labels = 1
         py_nvosd_text_params = display_meta.text_params[0]
@@ -173,51 +163,7 @@ def osd_sink_pad_buffer_probe(pad, info, u_data):
         except StopIteration:
             break
         
-        print("11111111 end of a frame 111111")
-
-    #past traking meta data
-    # l_user=batch_meta.batch_user_meta_list
-    # while l_user is not None:
-    #     try:
-    #         # Note that l_user.data needs a cast to pyds.NvDsUserMeta
-    #         # The casting is done by pyds.NvDsUserMeta.cast()
-    #         # The casting also keeps ownership of the underlying memory
-    #         # in the C code, so the Python garbage collector will leave
-    #         # it alone
-    #         # 請注意，l_user.data 需要轉換為 pyds.NvDsUserMeta。 轉換由 pyds.NvDsUserMeta.cast() 完成。 轉換還保留了 C 代碼中底層內存的所有權，因此 Python 垃圾收集器將不理會它
-    #         user_meta=pyds.NvDsUserMeta.cast(l_user.data)
-    #     except StopIteration:
-    #         break
-    #     if(user_meta and user_meta.base_meta.meta_type==pyds.NvDsMetaType.NVDS_TRACKER_PAST_FRAME_META):
-    #         try:
-    #             # Note that user_meta.user_meta_data needs a cast to pyds.NvDsPastFrameObjBatch
-    #             # The casting is done by pyds.NvDsPastFrameObjBatch.cast()
-    #             # The casting also keeps ownership of the underlying memory
-    #             # in the C code, so the Python garbage collector will leave
-    #             # it alone
-    #             pPastFrameObjBatch = pyds.NvDsPastFrameObjBatch.cast(user_meta.user_meta_data)
-    #         except StopIteration:
-    #             break
-    #         for trackobj in pyds.NvDsPastFrameObjBatch.list(pPastFrameObjBatch):
-    #             print("streamId=",trackobj.streamID)
-    #             print("surfaceStreamID=",trackobj.surfaceStreamID)
-    #             for pastframeobj in pyds.NvDsPastFrameObjStream.list(trackobj):
-    #                 print("numobj=",pastframeobj.numObj)
-    #                 print("uniqueId=",pastframeobj.uniqueId)
-    #                 print("classId=",pastframeobj.classId)
-    #                 print("objLabel=",pastframeobj.objLabel)
-    #                 for objlist in pyds.NvDsPastFrameObjList.list(pastframeobj):
-    #                     print('frameNum:', objlist.frameNum)
-    #                     print('tBbox.left:', objlist.tBbox.left)
-    #                     print('tBbox.width:', objlist.tBbox.width)
-    #                     print('tBbox.top:', objlist.tBbox.top)
-    #                     print('tBbox.right:', objlist.tBbox.height)
-    #                     print('confidence:', objlist.confidence)
-    #                     print('age:', objlist.age)
-    #     try:
-    #         l_user=l_user.next
-    #     except StopIteration:
-    #         break
+    
         
     
     return Gst.PadProbeReturn.OK
@@ -296,11 +242,6 @@ def pgie_src_pad_buffer_probe(pad, info, u_data):
     # C address of gst_buffer as input, which is obtained with hash(gst_buffer)
     batch_meta = pyds.gst_buffer_get_nvds_batch_meta(hash(gst_buffer))
     l_frame = batch_meta.frame_meta_list
-
-    detection_params = DetectionParam(CLASS_NB, ACCURACY_ALL_CLASS)
-    box_size_param = BoxSizeParam(IMAGE_HEIGHT, IMAGE_WIDTH,
-                                  MIN_BOX_WIDTH, MIN_BOX_HEIGHT)
-    nms_param = NmsParam(TOP_K, IOU_THRESHOLD)
 
     label_names = get_label_names_from_file("labels.txt")
 
