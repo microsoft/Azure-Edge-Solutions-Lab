@@ -83,7 +83,14 @@ The instructions below describe how to obtain the model files and data files in 
 
 3. Put `model.onnx` and `label.txt` in the model_configs folder
 
-4. For the image classifier, run the script `fix_output.py` to do the network graph surgery to match the default Triton path's expectation and put the reshaped `model.onnx` in the model_configs/secondary_classifier/1/ 
+4. For the image classifier, run the script `fix_output.py` to do the network graph surgery to match the default Triton path's expectation 
+   1. 
+    ```
+        pip install onnx_graphsurgeon --index-url https://pypi.ngc.nvidia.com
+        python fix_output.py model.onnx model.softmaxout.onnx
+    ```
+
+   2. Renamed the reshaped model to `model.onnx` and put it in the model_configs/secondary_classifier/1/ 
    
 5. Config the `ds_tb_pgie_config.txt` 
    1. Modify `num_detected_classes` property to map to the number of classes or objects that you've trained your custom vision model for. 
