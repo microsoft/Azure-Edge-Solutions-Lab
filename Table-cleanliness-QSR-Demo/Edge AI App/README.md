@@ -58,7 +58,7 @@ Edge AI App
 
 
 ## Custom Pipeline Architecture 
-![ds_arch](images/ds_architecture.png)
+![ds_arch](images/custom_pipeline_structure.png)
 
 ## Flow Chart of the Concept
 ![flow_chart](images/flow_chart.png)
