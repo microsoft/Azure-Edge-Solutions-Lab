@@ -84,6 +84,7 @@ The instructions below describe how to obtain the model files and data files in 
 3. Put `model.onnx` and `label.txt` in the model_configs folder
 
 4. For the image classifier, run the script `fix_output.py` to do the network graph surgery to match the default Triton path's expectation 
+
    1. 
     ```
         pip install onnx_graphsurgeon --index-url https://pypi.ngc.nvidia.com
