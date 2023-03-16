@@ -107,11 +107,8 @@ def tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter):
                 except StopIteration:
                     break
 
-
         except StopIteration:
             break
-
-        
         
         try:              
             l_obj = l_obj.next
@@ -157,7 +154,6 @@ def tb_cleanliness_detector(obj_counter, l_obj, tbid_to_counter):
 
     
         if table_state['counter'] >= ol_t_threshold: # more than three sec
-            print("======occupied======")
             table_state['occupancy'] = True
             table_state['status'] = 'Occupied'
             table_state['last_overlapped_ts'] = now
