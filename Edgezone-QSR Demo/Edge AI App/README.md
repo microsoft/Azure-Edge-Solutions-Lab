@@ -1,3 +1,5 @@
+<img src="images/inferenced_video.gif" width="400" height="250"/>
+
 ## Directory structure
 This directory demonstrates one custom deepstream pipeline to perform video analytics tasks for order accuracy:
 
