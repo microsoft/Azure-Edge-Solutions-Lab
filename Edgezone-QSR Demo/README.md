@@ -14,7 +14,7 @@ Deploy modular on-prem services on AKS and HCI; build Edge Zone infa | Modify on
 
 ### Major sections of this E2E tutorial:
 <!--Ordered List0-->
-* Step 0. Prerequisites
+* Step 0.  Prerequisites
 * Step 1. Preparing AKS in an Azure EdgeZone
 	* 1.a. Configuring ARC on Azure EdgeZone AKS
 	* 1.b. Build Flask Web Application
